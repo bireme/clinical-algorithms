@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, DATE, TEXT, VARCHAR, BIGINT, Enum
+from sqlalchemy import Column, ForeignKey, DATE, TEXT, VARCHAR, BIGINT, Enum, BOOLEAN
 from app.db import Base
 from .models_enums import (RecommendationType,
                            InterventionType,
@@ -99,3 +99,15 @@ class AlgorithmsNodesRecommendationsLinks(Base):
     )
     url = Column(VARCHAR(255), index=True)
     type = Column(Enum(Certainty), nullable=False)
+
+
+class Users(Base):
+    __tablename__ = "users"
+    id = Column(BIGINT, primary_key=True)
+    name = Column(VARCHAR(255), index=True, nullable=False)
+    email = Column(VARCHAR(255), index=True, nullable=False)
+    password = Column(VARCHAR(255), nullable=False)
+    phone = Column(VARCHAR(255))
+    maintainer = Column(BOOLEAN)
+    master = Column(BOOLEAN)
+    updated_at = Column(DATE, nullable=False)

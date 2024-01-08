@@ -1,30 +1,11 @@
 import { reactive } from 'vue';
-
-const usersMock = [
-  {
-    id: 1,
-    name: 'Gabriel Silveira',
-    email: 'gabriel@gabrielsilveira.com.br',
-    phone: '(11) 97676-8736',
-    maintainer: true,
-    master: false,
-    updatedAt: '23-10-2023 às 14:21h',
-  },
-  {
-    id: 2,
-    name: 'Roberto Rizzo',
-    email: 'robertopinarizzo@verx.com.br',
-    phone: '(11) 99917-5174',
-    maintainer: true,
-    master: true,
-    updatedAt: '22-10-2023 às 09:56h',
-  },
-];
+import { api } from 'boot/axios';
 
 const emptyUser = {
   id: 0,
   name: '',
   email: '',
+  password: '',
   phone: '',
   maintainer: false,
   master: false,
@@ -35,6 +16,7 @@ export interface IUser {
   id?: number,
   name: string,
   email: string,
+  password: string,
   phone: string,
   maintainer: boolean,
   master: boolean,
@@ -48,43 +30,46 @@ class Users {
     users: IUser[],
     user: IUser,
     searchResults: IUser[] | null,
+    totalSearchResult: number | null,
   } = reactive({
       loading: false,
       showEditDialog: false,
       users: [],
       user: { ...emptyUser },
       searchResults: null,
+      totalSearchResult: null,
     });
 
   constructor() {
-    this.data.users = [...usersMock];
+    this.data.users = [];
   }
 
   get usersList() {
-    return this.data.searchResults && this.data.searchResults.length
-      ? this.data.searchResults : this.data.users;
+    if (this.data.totalSearchResult !== null) return this.data.searchResults;
+
+    return this.data.users;
   }
 
-  public search(keyword: string) {
+  public async search(keyword: string) {
     try {
       this.data.loading = true;
 
       this.data.searchResults = [];
+      this.data.totalSearchResult = 0;
 
-      // eslint-disable-next-line no-restricted-syntax
-      for (const user of this.data.users) {
-        if (user.name.toLowerCase().includes(keyword.toLowerCase())) {
-          this.data.searchResults.push(user);
-        }
+      const { data } = await api.get(`users/search?keyword=${keyword}`);
+
+      if (data && data.length) {
+        this.data.searchResults = [...data];
+
+        this.data.totalSearchResult = data.length;
       }
 
-      return Promise.resolve(this.data.searchResults);
+      return Promise.resolve(true);
     } catch (error) {
       return Promise.reject(error);
     } finally {
-      setTimeout(() => {
-        this.data.loading = false;
-      }, 1000);
+      this.data.loading = false;
     }
   }
 
@@ -97,39 +82,35 @@ class Users {
   public editUser(user: IUser) {
     this.data.user = { ...user };
 
+    // hide original password hash
+    this.data.user.password = '';
+
+    // convert 0 / 1 to false / true
+    this.data.user.maintainer = !!this.data.user.maintainer;
+    this.data.user.master = !!this.data.user.master;
+
     this.toggleEditDialog();
   }
 
-  public save() {
+  public async get() {
     try {
-      this.data.loading = true;
+      const { data } = await api.get('users');
+
+      this.data.users = [...data];
 
       return Promise.resolve(true);
     } catch (error) {
       return Promise.reject(error);
-    } finally {
-      this.toggleEditDialog();
-
-      setTimeout(() => {
-        if (this.data.user.id) {
-          // update user
-        } else {
-          // insert user
-          this.data.users.unshift({
-            ...this.data.user,
-            id: 999,
-            updatedAt: '24/10/2023 às 14:07h',
-          });
-        }
-
-        this.data.loading = false;
-      }, 1500);
     }
   }
 
-  public delete() {
+  public async create() {
     try {
       this.data.loading = true;
+
+      await api.post('users', {
+        ...this.data.user,
+      });
 
       return Promise.resolve(true);
     } catch (error) {
@@ -137,25 +118,47 @@ class Users {
     } finally {
       this.toggleEditDialog();
 
-      setTimeout(() => {
-        const updatedUsers: IUser[] = [];
+      this.data.loading = false;
+    }
+  }
 
-        // eslint-disable-next-line no-restricted-syntax
-        for (const user of this.data.users) {
-          if (user.id !== this.data.user.id) {
-            updatedUsers.push({ ...user });
-          }
-        }
+  public async update() {
+    try {
+      this.data.loading = true;
 
-        this.data.users = [...updatedUsers];
+      await api.put('users', {
+        ...this.data.user,
+      });
 
-        this.data.loading = false;
-      }, 1500);
+      return Promise.resolve(true);
+    } catch (error) {
+      return Promise.reject(error);
+    } finally {
+      this.toggleEditDialog();
+
+      this.data.loading = false;
+    }
+  }
+
+  public async delete() {
+    try {
+      this.data.loading = true;
+
+      await api.delete(`users/${this.data.user.id}`);
+
+      return Promise.resolve(true);
+    } catch (error) {
+      return Promise.reject(error);
+    } finally {
+      this.toggleEditDialog();
+
+      this.data.loading = false;
     }
   }
 
   public clearSearch() {
     this.data.searchResults = null;
+    this.data.totalSearchResult = null;
   }
 
   public toggleEditDialog() {

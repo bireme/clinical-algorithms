@@ -5,11 +5,19 @@
     :loading="users.data.loading"
     title="Usuarios"
     row-key="name"
+    :rows-per-page-options="[0]"
     flat
-    hide-bottom
+    :hide-bottom="!(users.usersList && !users.usersList.length)"
   >
     <template v-slot:loading>
-      <q-inner-loading showing color="primary" />
+      <q-inner-loading
+        showing
+        color="primary"
+      />
+    </template>
+
+    <template v-slot:no-data>
+      <b>No se encontraron usuarios.</b>
     </template>
 
     <template v-slot:body="props">
@@ -31,11 +39,11 @@
         </q-td>
 
         <q-td key="maintainer" :props="props">
-          <check-or-not-icon :check="props.row.maintainer" />
+          <check-or-not-icon :check="!!props.row.maintainer" />
         </q-td>
 
         <q-td key="master" :props="props">
-          <check-or-not-icon :check="props.row.master" />
+          <check-or-not-icon :check="!!props.row.master" />
         </q-td>
 
         <q-td key="actions" :props="props">
@@ -55,7 +63,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue';
+import { inject, onMounted } from 'vue';
 import Users, { IUser } from 'src/services/users';
 import CheckOrNotIcon from 'components/icons/check-or-not-icon.vue';
 
@@ -102,4 +110,8 @@ const columns = [
 ];
 
 const editUser = (user: IUser) => users.editUser(user);
+
+onMounted(() => {
+  users.get();
+});
 </script>

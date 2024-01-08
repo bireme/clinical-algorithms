@@ -10,7 +10,10 @@
     :hide-bottom="!(algorithms.flowchartsList && !algorithms.flowchartsList.length)"
   >
     <template v-slot:loading>
-      <q-inner-loading showing color="primary" />
+      <q-inner-loading
+        color="primary"
+        showing
+      />
     </template>
 
     <template v-slot:no-data>

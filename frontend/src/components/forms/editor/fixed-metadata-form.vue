@@ -18,6 +18,7 @@
                 map-options
                 emit-value
                 dense
+                @update:model-value="setProp('recommendation_type')"
               />
 
               <q-input
@@ -26,6 +27,7 @@
                 type="textarea"
                 spellcheck="false"
                 dense
+                @update:model-value="setProp('description')"
               />
 
               <q-select
@@ -34,6 +36,7 @@
                 class="q-my-lg"
                 label="Intervention type"
                 dense
+                @update:model-value="setProp('intervention_type')"
               />
 
               <q-input
@@ -42,6 +45,7 @@
                 label="Intervention"
                 spellcheck="false"
                 dense
+                @update:model-value="setProp('intervention')"
               />
 
               <q-input
@@ -50,6 +54,7 @@
                 label="Comparator"
                 spellcheck="false"
                 dense
+                @update:model-value="setProp('comparator')"
               />
 
               <q-select
@@ -60,6 +65,7 @@
                 map-options
                 emit-value
                 dense
+                @update:model-value="setProp('direction')"
               />
 
               <q-select
@@ -71,6 +77,7 @@
                 map-options
                 emit-value
                 dense
+                @update:model-value="setProp('strength')"
               />
 
               <q-select
@@ -80,6 +87,7 @@
                 class="q-my-lg"
                 label="Certainty of evidence"
                 dense
+                @update:model-value="setProp('certainty_of_the_evidence')"
               />
 
               <q-input
@@ -89,6 +97,7 @@
                 type="textarea"
                 spellcheck="false"
                 dense
+                @update:model-value="setProp('implementation_considerations')"
               />
 
               <q-input
@@ -98,6 +107,7 @@
                 type="textarea"
                 spellcheck="false"
                 dense
+                @update:model-value="setProp('additional_comments')"
               />
 
               <q-input
@@ -107,6 +117,7 @@
                 type="textarea"
                 spellcheck="false"
                 dense
+                @update:model-value="setProp('recommendation_source')"
               />
 
               <metadata-links-form
@@ -150,7 +161,6 @@ import {
   onBeforeMount,
   reactive,
   inject,
-  watch,
   ref,
 } from 'vue';
 
@@ -194,11 +204,30 @@ const blockName = computed(() => `${props.index}. ${
 
 const isFormal = computed(() => data.recommendation_type === RECOMMENDATION_TYPE[0].value);
 
-watch(data, (value) => {
-  editor.metadata.fixed.set(props.index, {
-    ...value,
-  });
-});
+// DEPRECATED
+// watch(data, (value) => {
+//   console.log('Property has changed:', value.links);
+//   editor.metadata.fixed.set(props.index, {
+//     ...value,
+//   });
+// });
+
+const setProp = (propName: string) => {
+  const metadata = editor.metadata.getFromElement();
+
+  // create metadata block if it doesn't exist
+  if (!metadata || !metadata.fixed[props.index - 1]) {
+    editor.metadata.fixed.set(props.index, {
+      ...data,
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  editor.element.setProp(`metadata/fixed/${props.index - 1}/${propName}`, data[propName]);
+
+  editor.graph.notSaved();
+};
 
 const deleteBlock = () => {
   showDeleteBlockDialog.value = false;

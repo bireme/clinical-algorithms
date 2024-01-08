@@ -252,6 +252,13 @@ const saveAndClose = async () => {
     } else {
       await algorithms.save();
     }
+
+    // update algorithms list
+    if (algorithms.data.searchKeyword) {
+      await algorithms.search(algorithms.data.searchKeyword);
+    } else {
+      await algorithms.getAll();
+    }
   } catch (error) {
     $q.notify({
       message: 'Erro ao salvar dados básicos do fluxograma',

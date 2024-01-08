@@ -54,6 +54,6 @@ const clearSearch = () => users.clearSearch();
 const createUser = () => users.startCreatingUser();
 
 onBeforeMount(() => {
-  settings.page.setTitle('Usuários');
+  settings.page.setTitle('Usuarios');
 });
 </script>

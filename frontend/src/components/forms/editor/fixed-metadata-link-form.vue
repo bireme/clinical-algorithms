@@ -46,7 +46,7 @@
       >
         <q-card-section class="text-center q-py-lg">
           <b class="q-mb-md">
-            Deseja remover o link do bloco #{{ props.blockIndex }}?
+            Quiere eliminar el enlace #{{ props.linkIndex }}?
           </b>
 
           <div class="text-left">
@@ -104,6 +104,8 @@ const removeLink = () => {
     deletingLink.value = true;
 
     editor.metadata.fixed.removeLink(props.blockIndex, props.linkIndex);
+
+    editor.graph.notSaved();
   } finally {
     setTimeout(() => {
       deletingLink.value = false;
