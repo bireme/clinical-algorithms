@@ -319,7 +319,7 @@ class Graph {
         }
       }
 
-      this.editor.element.createRecommendationsPrint();
+      await this.editor.element.createRecommendationsForPDF();
 
       this.editor.element.moveAllElementsDown(200);
 

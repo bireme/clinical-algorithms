@@ -1,3 +1,5 @@
+import { dia } from 'jointjs';
+
 export interface IFixedMetadataLink {
   index: number,
   url: string,
@@ -18,4 +20,5 @@ export interface IFixedMetadata {
   additional_comments: string,
   recommendation_source: string,
   links: IFixedMetadataLink[],
+  recommendationElementId: dia.Cell.ID,
 }

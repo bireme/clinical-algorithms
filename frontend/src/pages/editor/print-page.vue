@@ -50,6 +50,7 @@ onMounted(async () => {
     editor.setIsMaintainer(false);
 
     editor.graph.setMode(GRAPH_MODE_PRINT);
+
     editor.setReadOnly(true);
 
     await editor.graph.open(id);
@@ -63,7 +64,7 @@ onMounted(async () => {
     setTimeout(async () => {
       loading.value = false;
 
-      // editor.graph.exportPDF();
+      editor.graph.exportPDF();
     }, 2000);
   }
 });

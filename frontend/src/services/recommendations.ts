@@ -22,6 +22,7 @@ import {
 } from 'src/services/editor/constants/metadata/intervention';
 
 import GradeIcon from 'src/assets/imgs/grade_logo.png';
+import { toDataUrl } from 'src/services/images';
 
 export const goodPracticeArrowsImage = (data: IFixedMetadata) => {
   if (data.direction === IN_FAVOR_OF_THE_INTERVENTION) {
@@ -33,6 +34,22 @@ export const goodPracticeArrowsImage = (data: IFixedMetadata) => {
   }
 
   return 'imgs/recommendation_arrows/both.png';
+};
+
+export const goodPracticeArrowsImageBase64 = async (data: IFixedMetadata) => {
+  let url = '';
+
+  if (data.direction === IN_FAVOR_OF_THE_INTERVENTION) {
+    url = '/imgs/recommendation_arrows/in_favor.png';
+  } else if (data.direction === AGAINST_THE_INTERVENTION) {
+    url = '/imgs/recommendation_arrows/against.png';
+  } else {
+    url = '/imgs/recommendation_arrows/both.png';
+  }
+
+  const base64 = await toDataUrl(url);
+
+  return base64 as string || '';
 };
 
 export const recommendationArrowsImage = (data: IFixedMetadata) => {
@@ -77,6 +94,54 @@ export const recommendationArrowsImage = (data: IFixedMetadata) => {
   }
 
   return '';
+};
+
+export const recommendationArrowsImageBase64 = async (data: IFixedMetadata) => {
+  let url = '';
+
+  // STRONG, IN FAVOR
+  if (
+    data.strength === STRONG_RECOMMENDATION
+    && data.direction === IN_FAVOR_OF_THE_INTERVENTION
+  ) {
+    url = '/imgs/recommendation_arrows/strong_in_favor_intervention.png';
+  }
+
+  // CONDITIONAL, IN FAVOR
+  if (
+    data.strength === CONDITIONAL_RECOMMENDATION
+    && data.direction === IN_FAVOR_OF_THE_INTERVENTION
+  ) {
+    url = '/imgs/recommendation_arrows/conditional_in_favor_intervention.png';
+  }
+
+  // CONDITIONAL, BOTH
+  if (
+    data.strength === CONDITIONAL_RECOMMENDATION
+    && data.direction === BOTH
+  ) {
+    url = '/imgs/recommendation_arrows/conditional_both_directions.png';
+  }
+
+  // CONDITIONAL, AGAINST
+  if (
+    data.strength === CONDITIONAL_RECOMMENDATION
+    && data.direction === AGAINST_THE_INTERVENTION
+  ) {
+    url = '/imgs/recommendation_arrows/conditional_in_favor_comparator.png';
+  }
+
+  // STRONG, AGAINST
+  if (
+    data.strength === STRONG_RECOMMENDATION
+    && data.direction === AGAINST_THE_INTERVENTION
+  ) {
+    url = '/imgs/recommendation_arrows/strong_in_favor_comparator.png';
+  }
+
+  const base64 = await toDataUrl(url);
+
+  return base64 as string || '';
 };
 
 export const recommendationArrowsLine = (recommendation: IFixedMetadata, showGradeLogo = false) => {

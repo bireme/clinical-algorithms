@@ -7,8 +7,8 @@ import Ports from 'src/services/editor/ports';
 import customElements, {
   CustomElement,
   elementName,
-  TEXTAREA_CLASSNAME,
   RecommendationTotalConstructor,
+  TEXTAREA_CLASSNAME,
 } from 'src/services/editor/elements/custom-elements';
 
 import { reactive } from 'vue';
@@ -17,12 +17,11 @@ import { autoResizeTextarea } from 'src/services/editor/textarea';
 import icons from 'src/services/editor/elements/svg_icons';
 
 import {
-  INFORMAL_RECOMMENDATION,
-  FORMAL_RECOMMENDATION,
-  RECOMMENDATION_TYPES,
-  GOOD_PRACTICES,
   getRecommendationTypeLabel,
-  getRecommendationTypeIcon,
+  FORMAL_RECOMMENDATION,
+  GOOD_PRACTICES,
+  INFORMAL_RECOMMENDATION,
+  RECOMMENDATION_TYPES,
 } from 'src/services/editor/constants/metadata/recommendation_type';
 
 import { COLOR_PRIMARY } from 'src/services/colors';
@@ -36,31 +35,9 @@ import {
   RecommendationDescriptionHeaderConstructor,
 } from 'src/services/editor/elements/recommendation-element';
 
-import {
-  goodPracticeArrowsImage,
-  orderRecommendations,
-  recommendationArrowsImage,
-} from 'src/services/recommendations';
+import { orderRecommendations } from 'src/services/recommendations';
 import { CERTAINTY } from 'src/services/editor/constants/metadata/certainty';
 import { IFixedMetadata } from 'src/services/editor/constants/metadata';
-
-// export interface IElementToolsPadding {
-//   left: number | 20,
-//   top: number | 12,
-//   right: number | 10,
-//   bottom: number | 16,
-// }
-
-// export interface IElementToolsSettings {
-//   element: dia.Element,
-//   options?: {
-//     position?: {
-//       x: number,
-//       y: number,
-//     },
-//     padding?: IElementToolsPadding,
-//   }
-// }
 
 class Element {
   editor: Editor;
@@ -404,7 +381,7 @@ class Element {
       Recommendation: async (x: number, y: number, originalElement: dia.Element) => {
         const metadata = this.editor.metadata.getFromElement(originalElement);
 
-        if (metadata && metadata.fixed) {
+        if (metadata && metadata.fixed.length) {
           const divId = randomString(32);
 
           const RecommendationElement = customElements.RecommendationElement(metadata.fixed, divId);
@@ -1038,7 +1015,7 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
     }
   }
 
-  public createRecommendationsPrint() {
+  public async createRecommendationsForPDF() {
     const elementWidth = this.editor.graph.getOutermostCoordinate('x') + 130;
     let elementHeight = 1000;
 
@@ -1047,7 +1024,7 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
     const allElements = this.getAll();
 
     if (allElements.length) {
-      for (const element of allElements) {
+      for await (const element of allElements) {
         const elementType = element.prop('type');
         const recommendationGroupIndex = element.prop('props/elementIndex');
 
@@ -1059,6 +1036,7 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
 
           const headerClass = `class-${randomString(16)}`;
 
+          // eslint-disable-next-line max-len
           const recommendationHeaderElement = new RecommendationDescriptionHeaderConstructor();
           recommendationHeaderElement.attr('label/text', `${recommendationGroupIndex}. ${label}`);
           recommendationHeaderElement.attr('body/class', headerClass);
@@ -1109,7 +1087,7 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
 
               let recommendationIndex = 1;
 
-              for (const recommendation of orderedRecommendations) {
+              for await (const recommendation of orderedRecommendations) {
                 let implementationTextClass = '';
                 let additionalCommentsTextClass = '';
                 let recommendationSourceTextClass = '';
@@ -1118,7 +1096,18 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
                 let comparatorTextClass = '';
                 let interventionTextClass = '';
 
-                const RecommendationElement = new RecommendationDescriptionConstructor();
+                const REConstructor = await RecommendationDescriptionConstructor(recommendation);
+
+                const RecommendationElement = new REConstructor();
+
+                // set the reference to the recommendation element on metadata
+                recommendation.recommendationElementId = RecommendationElement.id;
+
+                void this.editor.metadata.setMetadata(
+                  recommendationIndex - 1,
+                  'recommendationElementId',
+                  recommendation,
+                );
 
                 // creates the accessory classes
                 implementationTextClass = `class-${randomString(16)}`;
@@ -1146,7 +1135,6 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
                 }
 
                 RecommendationElement.attr('intervention_type_text/text', recommendation.intervention_type);
-                RecommendationElement.attr('intervention_type_image/xlinkHref', getRecommendationTypeIcon(recommendation.intervention_type));
                 RecommendationElement.attr('original_transcription_text/text', recommendation.description);
                 RecommendationElement.attr('original_transcription_text', { textWrap: { width: elementWidth * 0.8 } });
 
@@ -1184,11 +1172,10 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
                 RecommendationElement.attr('comparator_text/text', recommendation.comparator);
                 RecommendationElement.attr('comparator_text', { textWrap: { width: elementWidth * 0.37 } });
                 if (recommendation.recommendation_type === FORMAL_RECOMMENDATION) {
-                  RecommendationElement.attr('recommendation_arrows_image/xlinkHref', recommendationArrowsImage(recommendation));
+                  RecommendationElement.attr('recommendation_arrows_image/refX', (elementWidth / 2) - 100);
                 } else if (recommendation.direction) {
-                  RecommendationElement.attr('recommendation_arrows_image/xlinkHref', goodPracticeArrowsImage(recommendation));
+                  RecommendationElement.attr('recommendation_arrows_image/refX', (elementWidth / 2) - 55);
                 }
-                RecommendationElement.attr('recommendation_arrows_image/refX', (elementWidth / 2) - 100);
 
                 RecommendationElement.attr('intervention_text/text', recommendation.intervention);
                 RecommendationElement.attr('intervention_text/refX', (elementWidth / 2) + 100);

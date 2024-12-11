@@ -1,5 +1,17 @@
-import * as joint from 'jointjs';
+import { dia } from 'jointjs';
 import { CustomElement } from 'src/services/editor/elements/custom-elements';
+import { IFixedMetadata } from 'src/services/editor/constants/metadata';
+
+import { toDataUrl } from 'src/services/images';
+import {
+  goodPracticeArrowsImageBase64,
+  recommendationArrowsImageBase64,
+} from 'src/services/recommendations';
+
+import {
+  getRecommendationTypeIconBase64,
+  FORMAL_RECOMMENDATION,
+} from 'src/services/editor/constants/metadata/recommendation_type';
 
 const defaults = {
   attrs: {
@@ -17,7 +29,7 @@ const defaults = {
       refY: 20,
     },
     grade_logo: {
-      xlinkHref: './imgs/grade_logo.png',
+      xlinkHref: '',
       refX: 260,
       refY: 17,
       height: 24,
@@ -33,7 +45,7 @@ const defaults = {
       refY: 93,
     },
     intervention_type_image: {
-      xlinkHref: './img/diagnosis.bfe91be3.png',
+      xlinkHref: '',
       refX: 150,
       refY: 68,
       height: 40,
@@ -49,25 +61,25 @@ const defaults = {
       refY: 93,
     },
     certainty_icon_1: {
-      xlinkHref: './imgs/certainty.png',
+      xlinkHref: '',
       refX: 365,
       refY: 90,
       height: 20,
     },
     certainty_icon_2: {
-      xlinkHref: './imgs/certainty.png',
+      xlinkHref: '',
       refX: 365,
       refY: 90,
       height: 20,
     },
     certainty_icon_3: {
-      xlinkHref: './imgs/certainty.png',
+      xlinkHref: '',
       refX: 365,
       refY: 90,
       height: 20,
     },
     certainty_icon_4: {
-      xlinkHref: './imgs/certainty.png',
+      xlinkHref: '',
       refX: 365,
       refY: 90,
       height: 20,
@@ -106,7 +118,7 @@ const defaults = {
       refY: 220,
     },
     recommendation_arrows_image: {
-      xlinkHref: 'imgs/recommendation_arrows/strong_in_favor_intervention.png',
+      xlinkHref: '',
       refX: 300,
       refY: 200,
     },
@@ -157,6 +169,7 @@ const markup = {
   markup: [{
     tagName: 'rect',
     selector: 'body',
+    className: 'recommendation-print-element',
   }, {
     tagName: 'text',
     selector: 'recommendation_type',
@@ -241,11 +254,38 @@ const markup = {
   }],
 };
 
-export const RecommendationDescriptionConstructor = joint.dia.Element.define(
-  CustomElement.RECOMMENDATION_DESCRIPTION,
-  defaults,
-  markup,
-);
+export const RecommendationDescriptionConstructor = async (recommendation: IFixedMetadata) => {
+  const newDefaults = { ...defaults };
+
+  newDefaults.attrs.intervention_type_image.xlinkHref = await getRecommendationTypeIconBase64(
+    recommendation.intervention_type,
+  );
+
+  newDefaults.attrs.grade_logo.xlinkHref = await toDataUrl('/imgs/grade_logo.png');
+
+  const certaintyIconBase64 = await toDataUrl('/imgs/certainty.png');
+
+  newDefaults.attrs.certainty_icon_1.xlinkHref = certaintyIconBase64;
+  newDefaults.attrs.certainty_icon_2.xlinkHref = certaintyIconBase64;
+  newDefaults.attrs.certainty_icon_3.xlinkHref = certaintyIconBase64;
+  newDefaults.attrs.certainty_icon_4.xlinkHref = certaintyIconBase64;
+
+  if (recommendation.recommendation_type === FORMAL_RECOMMENDATION) {
+    newDefaults.attrs.recommendation_arrows_image.xlinkHref = await recommendationArrowsImageBase64(
+      recommendation,
+    );
+  } else if (recommendation.direction) {
+    newDefaults.attrs.recommendation_arrows_image.xlinkHref = await goodPracticeArrowsImageBase64(
+      recommendation,
+    );
+  }
+
+  return dia.Element.define(
+    CustomElement.RECOMMENDATION_DESCRIPTION,
+    newDefaults,
+    markup,
+  );
+};
 
 const headerDefaults = {
   attrs: {
@@ -275,7 +315,7 @@ const headerMarkup = {
   }],
 };
 
-export const RecommendationDescriptionHeaderConstructor = joint.dia.Element.define(
+export const RecommendationDescriptionHeaderConstructor = dia.Element.define(
   CustomElement.RECOMMENDATION_DESCRIPTION,
   headerDefaults,
   headerMarkup,
