@@ -1,27 +1,27 @@
 <template>
   <q-table
-    :rows="algorithms.flowchartsList"
+    :rows="algorithms.data.searchResults"
     :columns="columns"
     :loading="algorithms.data.loading"
-    title="Algoritmos"
     :rows-per-page-options="[0]"
     row-key="name"
+    class="custom-table"
     flat
     :hide-bottom="!(algorithms.flowchartsList && !algorithms.flowchartsList.length)"
   >
     <template v-slot:loading>
-      <q-inner-loading
-        color="primary"
-        showing
+      <loading-spinner
+        color="white"
       />
     </template>
 
     <template v-slot:no-data>
-      <b>No se encontraron algoritmos.</b>
+      <b class="text-white text-body2">No se encontraron algoritmos.</b>
     </template>
 
     <template v-slot:body="rows">
       <q-tr
+        v-if="!algorithms.data.loading"
         :props="rows"
         class="cursor-pointer"
         @click="editAlgorithm(rows.row, publicView ? 'public' : 'edit', publicViewInAdmin)"
@@ -89,6 +89,7 @@ import Users from 'src/services/users';
 import { ALGORITHMS_EDITOR, ALGORITHMS_PUBLIC_EDITOR, ALGORITHMS_SEARCH } from 'src/router/routes/algorithms';
 import { formatDatetime } from 'src/services/date';
 import Editor from 'src/services/editor';
+import LoadingSpinner from 'components/spinners/loading-spinner.vue';
 
 const props = defineProps({
   isMaintainer: {
@@ -122,18 +123,18 @@ const columns = [
     align: 'left',
     label: 'Título',
     field: 'title',
-    style: 'width:40%',
+    // style: 'width:40%',
   },
   {
     name: 'user_id',
     align: 'left',
     label: 'Autor',
     field: 'user_id',
-    style: 'width:10%',
+    // style: 'width:10%',
   },
   {
     name: 'updated_at',
-    align: 'center',
+    align: 'right',
     label: 'Última actualización.',
     field: 'updated_at',
     style: 'width:10%',
@@ -146,7 +147,9 @@ const columns = [
   },
 ];
 
-if (props.isMaster || props.isMaintainer) {
+if (publicView.value) {
+  columns.splice(3, 1);
+} else if (props.isMaster || props.isMaintainer) {
   columns.splice(1, 0, {
     name: 'status',
     align: 'left',

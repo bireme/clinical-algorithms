@@ -1,54 +1,78 @@
 <template>
-  <q-page class="full-width bg-grey-1">
-    <div class="row q-mx-md q-py-sm">
-      <div class="col-3">
-        <search-input
-          v-if="data.mountSearchInput"
-          :value="data.initialKeyword"
-          label="Palabra clave para la búsqueda de algoritmos"
-          @clear="clearSearch"
-          @search="searchFlowchart"
-        />
-      </div>
-    </div>
-
-    <loading-spinner
-      v-if="data.searching"
-    />
-
+  <q-page class="page-container-background q-pb-xl">
     <div
-      v-else-if="hasResults"
-      class="row q-mx-md"
+      style="margin-left:10%"
+      :style="{
+        width: Settings.isPublicView(route.name) ? '80%' : '100%',
+        marginLeft: Settings.isPublicView(route.name) ? '10%' : '0',
+        padding: Settings.isPublicView(route.name) ? '20px 0 0 0' : '10px 20px',
+      }"
     >
-      <div class="col-12">
-        <div class="text-body1 text-grey-7 q-mb-md">Resultados de la búsqueda:</div>
+      <div
+        v-if="Settings.isPublicView(route.name)"
+        class="text-white"
+      >
+        <div style="margin-bottom:3px">
+          <b style="font-size: 21px">¿Qué son los algoritmos clínicos?</b>
+        </div>
 
-        <!-- RESULTS CARDS -->
-        <div
-          v-for="key of Object.keys(data.results)"
-          :key="`result-${key}`"
-        >
-          <algorithms-search-result
-            v-if="data.results"
-            :keyword="data.keyword"
-            :result="data.results[key]"
+        <div>
+          Los algoritmos clínicos son secuencias de pasos o reglas definidas que los profesionales
+          de la salud siguen para diagnosticar, tratar o gestionar una condición médica específica.
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 q-pt-md">
+          <search-input
+            v-if="data.mountSearchInput"
+            :value="data.initialKeyword"
+            label="Palabra clave para la búsqueda de algoritmos"
+            @clear="clearSearch"
+            @search="searchFlowchart"
           />
         </div>
       </div>
-    </div>
 
-    <div
-      v-else-if="data.results !== null"
-      class="q-px-md text-grey-7"
-    >
-      No se encontraron resultados en la búsqueda.
-    </div>
+      <loading-spinner
+        v-if="data.searching"
+        color="white"
+        class="q-mt-xl"
+      />
 
-    <div
-      v-if="!data.keyword && showTable"
-      class="q-px-md"
-    >
-      <algorithms-table />
+      <div
+        v-else-if="hasResults"
+        class="row"
+      >
+        <div class="col-12">
+          <div class="text-body1 text-grey-7 q-mb-md">Resultados de la búsqueda:</div>
+
+          <!-- RESULTS CARDS -->
+          <div
+            v-for="key of Object.keys(data.results)"
+            :key="`result-${key}`"
+          >
+            <algorithms-search-result
+              v-if="data.results"
+              :keyword="data.keyword"
+              :result="data.results[key]"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div
+        v-else-if="data.results !== null"
+        class="text-grey-7"
+      >
+        No se encontraron resultados en la búsqueda.
+      </div>
+
+      <div
+        v-if="!data.keyword && showTable"
+      >
+        <algorithms-table />
+      </div>
     </div>
   </q-page>
 </template>
@@ -146,7 +170,7 @@ onBeforeMount(async () => {
   if (Settings.isPublicView(route.name)) {
     settings.page.setTitle('Búsqueda de algoritmos');
   } else {
-    settings.page.setTitle('Publicación de algoritmos (visualización para usuarios finales)');
+    settings.page.setTitle('Búsqueda (visualización para usuarios finales)');
   }
 
   data.mountSearchInput = true;

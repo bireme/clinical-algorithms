@@ -3,6 +3,7 @@
     :rows="users.usersList"
     :columns="columns"
     :loading="users.data.loading"
+    class="custom-table"
     title="Usuarios"
     row-key="name"
     :rows-per-page-options="[0]"

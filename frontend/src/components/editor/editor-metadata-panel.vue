@@ -7,7 +7,7 @@
     <div
       v-if="showMetadataPanel"
       id="editor-metadata-panel"
-      class="bg-white shadow-light-up"
+      class="shadow-7"
       :class="{ 'editor-read-only': !editable }"
     >
       <div
@@ -15,7 +15,7 @@
         :class="{ 'editor-read-only': !editable }"
       >
         <div
-          class="text-body1 text-bold text-primary q-px-md q-pt-md q-pb-sm"
+          class="text-body1 text-bold text-indigo-10 q-px-md q-pt-md q-pb-sm"
           style="font-size:18px"
         >
           {{ data.name }}{{ elementLabel }}

@@ -12,11 +12,6 @@ export const ALGORITHMS_PUBLIC_SEARCH = 'public-search';
 
 const routes = [
   {
-    path: '',
-    name: ALGORITHMS_PUBLIC_SEARCH,
-    component: () => import('pages/algorithm/algorithms-search-page.vue'),
-  },
-  {
     path: ALGORITHMS_PUBLIC_EDITOR_PATH,
     name: ALGORITHMS_PUBLIC_EDITOR,
     component: () => import('pages/editor/editor-page.vue'),

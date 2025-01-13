@@ -7,6 +7,8 @@ import { orderRecommendations } from 'src/services/recommendations';
 
 import { IFixedMetadata, IFixedMetadataLink } from 'src/services/editor/constants/metadata';
 
+import { orderRecommendations } from 'src/services/recommendations';
+
 import { CustomElement } from 'src/services/editor/elements/custom-elements';
 
 import {

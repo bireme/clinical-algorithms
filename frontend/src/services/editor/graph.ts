@@ -111,17 +111,17 @@ class Graph {
           this.editor.data.graph.fromJSON(graphJson);
 
           setTimeout(() => {
-            const allElementsAgain = this.editor.data.graph.getElements();
+            const allElements = this.editor.data.graph.getElements();
 
-            this.editor.element.input.setValues(allElementsAgain);
-            this.editor.element.textarea.setValues(allElementsAgain);
+            this.editor.element.input.setValues(allElements);
+            this.editor.element.textarea.setValues(allElements);
           }, 500);
 
           if (!this.editor.data.readOnly) {
             setTimeout(() => {
-              const allElements = this.editor.data.graph.getElements();
+              const allElementsAgain = this.editor.data.graph.getElements();
 
-              this.editor.element.createElementsTools(allElements);
+              this.editor.element.createElementsTools(allElementsAgain);
               this.editor.element.textarea.createEventHandlers();
             }, 200);
           }

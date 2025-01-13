@@ -1,42 +1,39 @@
 <template>
-  <q-page class="bg-grey-1">
+  <q-page class="page-container-background q-pb-xl">
     <div class="row q-mx-md q-py-sm">
-      <div class="col-9">
-        <div class="float-left q-mr-lg" style="width:370px">
+      <div class="col-9 q-py-md">
+        <div
+          class="float-left q-mr-lg"
+          style="width:370px"
+        >
           <search-input
             label="Palabra clave para la búsqueda de algoritmos"
             @search="searchAlgorithm"
-            @clear="tryClearingSearch"
+            @clear="clearKeyword"
           />
         </div>
 
         <div
           v-if="algorithmsCategories.data.categories.length"
-          class="float-left q-mr-lg"
-          style="width:auto;min-width:150px"
+          class="float-left q-mr-lg" style="width:200px"
         >
-          <q-select
-            v-model="algorithms.data.searchCategory"
-            :options="algorithmsCategories.data.categories"
-            :option-label="opt => Object(opt) === opt && 'name' in opt ? opt.name : '- Null -'"
-            label="Categoría"
-            clearable
-            @update:model-value="updateSearch"
-            @clear="tryClearingSearch"
+          <categories-select
+            custom-select-id="categories-select"
+            custom-select-label="Categoría"
+            :custom-select-options="algorithmsCategories.data.categories"
+            @update="setCategory"
           />
         </div>
 
         <div
           v-if="isMaster && users.data.users.length"
-          class="float-left q-mr-lg" style="width:auto;min-width:150px"
+          class="float-left q-mr-lg" style="width:200px"
         >
-          <q-select
-            v-model="algorithms.data.searchUser"
-            :options="users.data.users"
-            :option-label="opt => Object(opt) === opt && 'name' in opt ? opt.name : '- Null -'"
-            label="Autor"
-            clearable
-            @update:model-value="updateSearch"
+          <categories-select
+            custom-select-id="author-select"
+            custom-select-label="Autor"
+            :custom-select-options="users.data.users"
+            @update="setUser"
           />
         </div>
       </div>
@@ -45,7 +42,7 @@
         <q-btn
           v-if="isMaintainer"
           label="Registrar algoritmo"
-          color="primary"
+          color="secondary"
           push
           @click="createAlgorithm"
         />
@@ -56,14 +53,10 @@
       v-if="showTable"
       class="q-px-md"
     >
-      <q-card class="shadow-light">
-        <q-card-section>
-          <algorithms-table
-            :is-maintainer="isMaintainer"
-            :is-master="isMaster"
-          />
-        </q-card-section>
-      </q-card>
+      <algorithms-table
+        :is-maintainer="isMaintainer"
+        :is-master="isMaster"
+      />
     </div>
 
     <edit-algorithm-modal
@@ -82,16 +75,19 @@ import {
 
 import { onBeforeRouteLeave } from 'vue-router';
 
+import { LocalStorage } from 'quasar';
+
 import { ALGORITHMS_EDITOR } from 'src/router/routes/algorithms';
 
-import Settings from 'src/services/settings';
 import SearchInput from 'components/inputs/search-input.vue';
 import AlgorithmsTable from 'components/tables/algorithms-table.vue';
-import Algorithms from 'src/services/algorithms';
 import EditAlgorithmModal from 'components/modals/algorithms/edit-algorithm-modal.vue';
+import CategoriesSelect from 'components/selects/categories-select/categories-select.vue';
+
+import Settings from 'src/services/settings';
+import Algorithms from 'src/services/algorithms';
 import AlgorithmsCategories from 'src/services/algorithms-categories';
 import Users from 'src/services/users';
-import { LocalStorage } from 'quasar';
 
 const users = new Users();
 provide('users', users);
@@ -134,20 +130,53 @@ const updateSearch = () => {
 
 const createAlgorithm = () => algorithms.startCreating();
 
-const tryClearingSearch = () => {
-  algorithms.clearSearch();
+const tryClearingSearch = async () => {
+  // algorithms.clearSearch();
+  algorithms.data.algorithms = [];
+  algorithms.data.searchResults = [];
 
   if (
     algorithms.data.searchCategory
     || algorithms.data.searchUser
+    || algorithms.data.searchKeyword
   ) {
-    algorithms.search();
+    await algorithms.search();
   } else if (isMaster.value) {
-    algorithms.getAll(true);
+    await algorithms.getAll(true);
   } else if (isMaintainer.value) {
-    algorithms.getUserAlgorithms(LocalStorage.getItem('user'));
+    await algorithms.getUserAlgorithms(LocalStorage.getItem('user'));
   } else {
-    algorithms.getAll();
+    await algorithms.getAll();
+  }
+};
+
+const clearKeyword = () => {
+  algorithms.data.searchKeyword = '';
+
+  tryClearingSearch();
+};
+
+const setCategory = (selectedCategory: { id: number, name: string }) => {
+  if (!selectedCategory) {
+    algorithms.data.searchCategory = null;
+
+    tryClearingSearch();
+  } else {
+    algorithms.data.searchCategory = { ...selectedCategory };
+
+    updateSearch();
+  }
+};
+
+const setUser = (selectedUser: { id: number, name: string }) => {
+  if (!selectedUser) {
+    algorithms.data.searchUser = null;
+
+    tryClearingSearch();
+  } else {
+    algorithms.data.searchUser = { ...selectedUser };
+
+    updateSearch();
   }
 };
 
@@ -172,3 +201,8 @@ onBeforeRouteLeave((leaveGuard) => {
   }
 });
 </script>
+
+<style lang="sass">
+.q-field__label
+  color: black
+</style>

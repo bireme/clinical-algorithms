@@ -3,6 +3,13 @@
 b
   font-weight: 500
 
+.page-container-background
+  background-color: #08182F !important
+  background-image: url('/imgs/backgrounds/page-background.jpg') !important
+  background-size: 100%
+  background-position: center bottom
+  background-repeat: no-repeat
+
 .q-table .q-tr:hover .q-td
   color: var(--q-primary)
 
@@ -99,3 +106,67 @@ g[data-type="LaneElement"] .element-textarea-input
   cursor: pointer
   color: var(--q-primary)
 
+
+.custom-table
+  background-color: transparent
+
+.custom-table thead
+  color: #1998dd
+
+.custom-table .q-table__title
+  color: white
+
+.custom-table thead tr th
+  font-size: 13px !important
+  border: none
+  padding-bottom: 0
+
+.custom-table .q-tr
+  background-color: white
+
+.custom-table .q-tr .q-td
+  border: none
+
+.custom-table .q-tr .q-td:first-of-type
+  -webkit-border-top-left-radius: 10px
+  -webkit-border-bottom-left-radius: 10px
+  -moz-border-radius-topleft: 10px
+  -moz-border-radius-bottomleft: 10px
+  border-top-left-radius: 10px
+  border-bottom-left-radius: 10px
+
+.custom-table .q-tr .q-td:last-of-type
+  -webkit-border-top-right-radius: 10px
+  -webkit-border-bottom-right-radius: 10px
+  -moz-border-radius-topright: 10px
+  -moz-border-radius-bottomright: 10px
+  border-top-right-radius: 10px
+  border-bottom-right-radius: 10px
+
+.custom-table table
+  border-collapse: separate !important
+  border-spacing: 0 10px !important
+
+.powered-by
+  position: absolute
+  top: 9px
+  left: calc(50% - 63px)
+  text-align: right
+  font-size: 13px
+  line-height: 14px
+
+.logo-bireme-footer
+  position: absolute
+  top: 11px
+  left: 50%
+  height: 24px
+  width: 120px
+  border-left: 1px solid white
+
+.editor-layout-footer
+  z-index: 999
+  position: absolute
+  bottom: 15px
+  left: 0
+  width: 400px
+  height: 68px

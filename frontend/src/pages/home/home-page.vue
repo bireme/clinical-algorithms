@@ -1,44 +1,40 @@
 <template>
-  <q-page padding>
-    <div class="full-width full-height">
-      <q-img
-        :src="Logo"
-        class="absolute-top-right"
-        style="margin: 25px 25px 0 0"
-        width="25%"
-        alt="PAHO"
-      />
+  <q-page class="page-container-background text-white">
+    <q-img
+      :src="LogoHeader"
+      class="float-right"
+      fit="contain"
+      style="height:74px;width:400px;margin:15px"
+    />
 
-      <div
-        style="position:absolute;width:600px;top:50%;margin-top:-90px;left:50%;margin-left:-300px"
-      >
+    <div class="full-width full-height" style="padding:30px">
+      <h5 class="text-bold" style="margin-block-start:0;margin-block-end:10px">
+        Sistema de algoritmos clínicos
+      </h5>
 
-        <div
-          class="q-mt-md text-center text-primary text-bold"
-          style="font-size:42px"
-        >
-          Sistema de algoritmos clínicos
-        </div>
+      <div style="width: 600px">
+        <p>
+          Los algoritmos clínicos son secuencias de pasos o reglas definidas que los profesionales
+          de la salud siguen para diagnosticar, tratar o gestionar una condición médica específica.
+          Estos algoritmos se basan en evidencia científica, mejores prácticas clínicas y
+          experiencia acumulada. Ayudan a los médicos a tomar decisiones informadas y consistentes
+          al tratar problemas de salud complejos.
+        </p>
+
+        <p>
+          Los algoritmos clínicos pueden abarcar una variedad de áreas, desde el diagnóstico de una
+          enfermedad hasta la elección del tratamiento más apropiado. Por lo general, se presentan
+          en forma de diagrama de flujo o lista de pasos a seguir, con diferentes ramificaciones
+          dependiendo de las características del paciente o de los resultados de pruebas.
+        </p>
+
+        <p>
+          Estos algoritmos son una herramienta valiosa en la práctica médica, especialmente en
+          especialidades donde el diagnóstico y el tratamiento involucran una serie de
+          consideraciones y opciones. Pueden ayudar a estandarizar la atención al paciente, mejorar
+          la eficiencia y reducir errores médicos.
+        </p>
       </div>
-    </div>
-
-    <div
-      class="absolute-bottom-left bg-primary full-width"
-      style="height:54px"
-    >
-      <div
-        class="absolute-top-right text-white text-bold text-right q-pr-md"
-        style="font-size:14px;line-height:110%;right:310px;top:10px;border-right:2px solid white"
-      >
-        <div class="float-left">Powered<br/>by</div>
-      </div>
-
-      <q-img
-        :src="LogoBiremeWhite"
-        class="absolute-top-right auto"
-        style="top:11px;right:177px"
-        width="117px"
-      />
     </div>
   </q-page>
 </template>
@@ -46,8 +42,7 @@
 <script setup lang="ts">
 import { inject, onBeforeMount } from 'vue';
 import Settings from 'src/services/settings';
-import Logo from 'assets/imgs/logo_large.png';
-import LogoBiremeWhite from 'assets/imgs/logo-bireme-white.png';
+import LogoHeader from 'assets/imgs/logo_paho_header.png';
 
 const settings = inject('settings') as Settings;
 

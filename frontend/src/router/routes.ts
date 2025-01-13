@@ -4,12 +4,27 @@ import Home from './routes/home';
 import Users from './routes/users';
 import AlgorithmsCategories from './routes/algorithms_categories';
 
-import Algorithms, { ALGORITHMS_PUBLIC_PRINT, ALGORITHMS_PUBLIC_PRINT_PATH } from './routes/algorithms';
+import Algorithms, {
+  ALGORITHMS_PUBLIC_PRINT,
+  ALGORITHMS_PUBLIC_PRINT_PATH,
+  ALGORITHMS_PUBLIC_SEARCH,
+} from './routes/algorithms';
 
 const routes: RouteRecordRaw[] = [
   {
     path: '',
-    component: () => import('layouts/main-layout.vue'),
+    component: () => import('layouts/public-layout.vue'),
+    children: [
+      {
+        path: '',
+        name: ALGORITHMS_PUBLIC_SEARCH,
+        component: () => import('pages/algorithm/algorithms-search-page.vue'),
+      },
+    ],
+  },
+  {
+    path: '',
+    component: () => import('layouts/admin-layout.vue'),
     children: [
       ...Home,
       ...Users,

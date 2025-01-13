@@ -5,7 +5,8 @@
   >
     <div
       v-if="!readOnly"
-      id="updated-at-info" class="text-center text-body1"
+      id="updated-at-info"
+      class="text-center text-body1"
     >
       <div
         v-if="saved === null"
@@ -168,8 +169,8 @@ const viewPublicGraph = async () => {
 #updated-at-info
   position: absolute
   bottom: 21px
-  left: 0
-  width: calc(100% - 700px)
+  left: 295px
+  width: 425px
   -webkit-touch-callout: none
   -webkit-user-select: none
   -html-user-select: none

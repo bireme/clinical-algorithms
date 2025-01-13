@@ -4,6 +4,7 @@
       :rows="categories.data.categories"
       :columns="columns"
       :loading="categories.data.loading"
+      class="custom-table"
       title="Categorías"
       :rows-per-page-options="[0]"
       row-key="name"

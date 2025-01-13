@@ -1,17 +1,19 @@
 <template>
-  <q-page class="bg-grey-1" padding>
-    <div class="row q-mb-md">
+  <q-page class="page-container-background q-pb-xl">
+    <div class="row q-pa-lg">
       <div class="col-12 text-right">
         <q-btn
           label="Registrar categoría"
-          color="primary"
+          color="secondary"
           push
           @click="startCreatingCategory"
         />
       </div>
     </div>
 
-    <algorithms-categories-table />
+    <div class="q-pa-lg">
+      <algorithms-categories-table />
+    </div>
 
     <edit-algorithm-category-modal />
   </q-page>

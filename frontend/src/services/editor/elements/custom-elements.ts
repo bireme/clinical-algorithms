@@ -205,7 +205,7 @@ const customElements = {
           items += '</div></div>';
         }
 
-        items += recommendationArrowsLine(recommendation, true);
+        items += recommendationArrowsLine(recommendation, true, true);
 
         items += '</div>';
 

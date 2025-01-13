@@ -144,7 +144,11 @@ export const recommendationArrowsImageBase64 = async (data: IFixedMetadata) => {
   return base64 as string || '';
 };
 
-export const recommendationArrowsLine = (recommendation: IFixedMetadata, showGradeLogo = false) => {
+export const recommendationArrowsLine = (
+  recommendation: IFixedMetadata,
+  showGradeLogo = false,
+  coloredTitles = false,
+) => {
   let items = '';
 
   if (
@@ -158,7 +162,11 @@ export const recommendationArrowsLine = (recommendation: IFixedMetadata, showGra
   items += '<div class="row full-width">';
 
   items += '<div class="col-4 flex items-center text-caption q-pa-sm">';
-  items += `<div><b>Comparator:</b><br/>${recommendation.comparator}</div>`;
+  if (coloredTitles) {
+    items += `<div><b class="text-primary">Comparator:</b><br/>${recommendation.comparator}</div>`;
+  } else {
+    items += `<div><b>Comparator:</b><br/>${recommendation.comparator}</div>`;
+  }
   items += '</div>';
 
   items += '<div class="col-4 flex items-center justify-center">';
@@ -174,7 +182,11 @@ export const recommendationArrowsLine = (recommendation: IFixedMetadata, showGra
   items += '</div>';
 
   items += '<div class="col-4 flex items-center text-caption q-pa-sm">';
-  items += `<div><b>Intervention:</b><br/>${recommendation.intervention}</div>`;
+  if (coloredTitles) {
+    items += `<div><b class="text-primary">Intervention:</b><br/>${recommendation.intervention}</div>`;
+  } else {
+    items += `<div><b>Intervention:</b><br/>${recommendation.intervention}</div>`;
+  }
   items += '</div>';
 
   items += '</div>';

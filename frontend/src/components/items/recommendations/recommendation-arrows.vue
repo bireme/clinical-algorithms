@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="fixedMetadata && fixedMetadata.intervention && fixedMetadata.comparator"
-    v-html="recommendationArrowsLine(fixedMetadata)"
+    v-html="recommendationArrowsLine(fixedMetadata, false, true)"
   />
 </template>
 

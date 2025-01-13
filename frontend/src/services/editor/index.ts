@@ -162,11 +162,25 @@ class Editor {
         });
 
         this.data.paper.on('element:mouseover', (elementView) => {
-          this.element.showPorts(elementView.options.model.id);
+          if (!this.data.readOnly) {
+            this.element.showPorts(elementView.options.model.id);
+          }
+
+          if (elementView.options.model.prop('type') === CustomElement.RECOMMENDATION_TOTAL) {
+            // avoid interacting with RECOMMENDATION_TOTAL elements
+            this.data.paper?.setInteractivity(false);
+          }
         });
 
         this.data.paper.on('element:mouseout', (elementView) => {
-          this.element.hidePorts(elementView.options.model.id);
+          if (!this.data.readOnly) {
+            this.element.hidePorts(elementView.options.model.id);
+          }
+
+          if (elementView.options.model.prop('type') === CustomElement.RECOMMENDATION_TOTAL) {
+            // avoid interacting with RECOMMENDATION_TOTAL elements
+            this.data.paper?.setInteractivity(true);
+          }
         });
 
         this.data.paper.on('element:mouseleave', (elementView) => {
@@ -188,6 +202,8 @@ class Editor {
               this.data.readOnly
               && elementView.options.model.prop('type') === CustomElement.LANE
             )
+            // cannot interact with RECOMMENDATION_TOTAL elements at all
+            && elementView.options.model.prop('type') !== CustomElement.RECOMMENDATION_TOTAL
           ) {
             this.element.select(elementView.options.model.id);
           }

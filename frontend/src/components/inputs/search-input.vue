@@ -2,9 +2,13 @@
   <div>
     <q-input
       v-model="text"
-      :label="props.label"
-      bottom-slots
+      :placeholder="props.label"
+      class="custom-search-input"
       debounce="750"
+      outlined
+      dense
+      dark
+      bottom-slots
       @update:model-value="emitSearch"
     >
       <template v-slot:append>
@@ -14,8 +18,6 @@
           class="cursor-pointer"
           @click="emitClear"
         />
-
-        <q-icon name="search" />
       </template>
     </q-input>
   </div>
@@ -57,3 +59,14 @@ onMounted(() => {
   }
 });
 </script>
+
+<style lang="sass">
+.custom-search-input .q-field__control
+  background-color: white
+
+.custom-search-input .q-field__control .q-icon
+  color: grey
+
+.custom-search-input .q-field__native
+  color: black
+</style>

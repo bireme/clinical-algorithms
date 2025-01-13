@@ -3,10 +3,11 @@
     <q-expansion-item
       v-for="section in sections"
       :key="section.name"
-      expand-separator
       :label="section.name"
-      group="main-menu"
       :default-opened="isOpen(section)"
+      :icon="section.icon"
+      expand-separator
+      group="main-menu"
     >
       <q-item
         v-for="item in section.items"
@@ -16,7 +17,14 @@
         v-ripple
         @click="goPage(item.name)"
       >
-        <q-item-section class="q-pl-md">{{ item.label }}</q-item-section>
+        <q-item-section class="q-pl-xl" avatar>
+          <q-icon
+            color="primary"
+            :name="item.icon"
+          />
+        </q-item-section>
+
+        <q-item-section>{{ item.label }}</q-item-section>
       </q-item>
     </q-expansion-item>
   </q-list>

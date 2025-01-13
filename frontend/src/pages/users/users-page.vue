@@ -1,7 +1,7 @@
 <template>
-  <q-page>
+  <q-page class="page-container-background q-pb-xl">
     <div class="row q-mx-md q-py-sm">
-      <div class="col-3">
+      <div class="col-4 q-py-md">
         <search-input
           label="Buscar usuarios"
           @search="searchUsers"
@@ -9,10 +9,10 @@
         />
       </div>
 
-      <div class="col-9 q-pt-lg q-pr-md text-right">
+      <div class="col-8 q-pt-lg q-pr-md text-right">
         <q-btn
           label="Registrar usuario"
-          color="primary"
+          color="secondary"
           push
           @click="createUser"
         />

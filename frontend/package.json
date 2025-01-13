@@ -1,6 +1,6 @@
 {
   "name": "paho",
-  "version": "0.11.2",
+  "version": "0.2.0",
   "description": "PAHO flowchart editor.",
   "productName": "PAHO Frontend",
   "author": "Gabriel <gabriel@gabrielsilveira.com.br>",

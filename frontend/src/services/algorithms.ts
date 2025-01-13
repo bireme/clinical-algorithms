@@ -59,7 +59,7 @@ class Algorithms {
     searchKeyword: string,
     searchCategory: { id: number, name: string } | null,
     searchUser: { id: number, name: string } | null,
-    searchResults: IAlgorithm[] | null,
+    searchResults: IAlgorithm[],
     totalSearchResult: number | null,
   } = reactive({
       loading: false,
@@ -70,7 +70,7 @@ class Algorithms {
       searchKeyword: '',
       searchCategory: null,
       searchUser: null,
-      searchResults: null,
+      searchResults: [],
       totalSearchResult: null,
     });
 
@@ -103,7 +103,7 @@ class Algorithms {
       const { data: flowcharts }: { data: IAlgorithm[] } = await api.get(`${resource}?list_all_algorithms=${listAllAlgorithms}`);
 
       if (flowcharts) {
-        this.data.algorithms = [...flowcharts];
+        this.data.searchResults = [...flowcharts];
       }
 
       return Promise.resolve(true);
@@ -275,7 +275,7 @@ class Algorithms {
   }
 
   public clearSearch() {
-    this.data.searchResults = null;
+    this.data.searchResults = [];
     this.data.totalSearchResult = null;
     this.data.searchKeyword = '';
     this.data.searchUser = null;

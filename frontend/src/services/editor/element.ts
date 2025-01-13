@@ -790,8 +790,7 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
     elements.forEach((element) => {
       // hide element tools
       if (this.editor.data.paper && !this.editor.data.readOnly) {
-        element.findView(this.editor.data.paper)
-          .hideTools();
+        element.findView(this.editor.data.paper).hideTools();
       } else if (this.editor.data.readOnly) {
         this.createReadonlyTools(element, false);
       }
@@ -866,17 +865,12 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
 
         this.data.selectedId = elementId;
 
-        console.log('Selected element props:');
-        console.log({ ...element });
-
         if (element) {
           const elementType = element.prop('type');
 
           if (elementType === CustomElement.LANE) {
             const { y } = element.position();
 
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
             element.position(0, y);
 
             if (document.activeElement?.tagName !== 'INPUT') {
@@ -986,9 +980,7 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
               textarea.value = element.prop('props/label') || '';
 
               // force resizing textarea...
-              if (this.editor.data.readOnly) {
-                autoResizeTextarea(textarea);
-              }
+              autoResizeTextarea(textarea);
             }
 
             setTimeout(() => {
@@ -1561,14 +1553,16 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
   }
 
   public updateRecommendationsTotals(element?: dia.Element) {
-    this.deleteRecommendationsTotals();
+    if (!this.editor.data.readOnly) {
+      this.deleteRecommendationsTotals();
 
-    const parentElement = element || this.getSelected();
+      const parentElement = element || this.getSelected();
 
-    if (parentElement) {
-      this.editor.metadata.clearPendency();
+      if (parentElement) {
+        this.editor.metadata.clearPendency();
 
-      this.createRecommendationsTotals(parentElement);
+        this.createRecommendationsTotals(parentElement);
+      }
     }
   }
 
