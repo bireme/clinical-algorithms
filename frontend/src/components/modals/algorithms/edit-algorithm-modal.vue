@@ -133,7 +133,6 @@ import {
 } from 'vue';
 
 import {
-  LocalStorage,
   QForm,
   QInput,
   useQuasar,
@@ -192,6 +191,8 @@ const deleteAndClose = async () => {
     data.deleting = true;
 
     await algorithms.delete();
+
+    await algorithms.updateAlgorithmsList();
   } catch (error) {
     $q.notify({
       message: 'Erro ao excluir os dados básicos do fluxograma',
@@ -209,17 +210,12 @@ const saveAndClose = async () => {
 
     if (algorithms.data.algorithm.id) {
       await algorithms.update();
+
+      await algorithms.updateAlgorithmsList();
     } else {
       await algorithms.save();
-    }
 
-    // update algorithms list
-    if (algorithms.data.searchKeyword) {
-      await algorithms.search();
-    } else if (props.isMaintainer) {
-      await algorithms.getUserAlgorithms(LocalStorage.getItem('user'));
-    } else {
-      await algorithms.getAll();
+      window.location.reload();
     }
   } catch (error) {
     $q.notify({

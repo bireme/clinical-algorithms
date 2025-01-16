@@ -130,37 +130,25 @@ const updateSearch = () => {
 
 const createAlgorithm = () => algorithms.startCreating();
 
-const tryClearingSearch = async () => {
+const updateAlgorithmsList = async () => {
   // algorithms.clearSearch();
   algorithms.data.algorithms = [];
   algorithms.data.searchResults = [];
 
-  if (
-    algorithms.data.searchCategory
-    || algorithms.data.searchUser
-    || algorithms.data.searchKeyword
-  ) {
-    await algorithms.search();
-  } else if (isMaster.value) {
-    await algorithms.getAll(true);
-  } else if (isMaintainer.value) {
-    await algorithms.getUserAlgorithms(LocalStorage.getItem('user'));
-  } else {
-    await algorithms.getAll();
-  }
+  await algorithms.updateAlgorithmsList();
 };
 
 const clearKeyword = () => {
   algorithms.data.searchKeyword = '';
 
-  tryClearingSearch();
+  updateAlgorithmsList();
 };
 
 const setCategory = (selectedCategory: { id: number, name: string }) => {
   if (!selectedCategory) {
     algorithms.data.searchCategory = null;
 
-    tryClearingSearch();
+    updateAlgorithmsList();
   } else {
     algorithms.data.searchCategory = { ...selectedCategory };
 
@@ -172,7 +160,7 @@ const setUser = (selectedUser: { id: number, name: string }) => {
   if (!selectedUser) {
     algorithms.data.searchUser = null;
 
-    tryClearingSearch();
+    updateAlgorithmsList();
   } else {
     algorithms.data.searchUser = { ...selectedUser };
 

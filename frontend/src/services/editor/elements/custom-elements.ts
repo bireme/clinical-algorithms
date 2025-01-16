@@ -193,8 +193,6 @@ const customElements = {
 
     for (const recommendation of orderedRecommendation) {
       if (recommendation.intervention && recommendation.comparator) {
-        items += `<div class="row" data-index="${recommendation.index}">`;
-
         if (
           lastRecommendation?.recommendation_type !== recommendation.recommendation_type
           || lastRecommendation?.intervention_type !== recommendation.intervention_type
@@ -204,6 +202,8 @@ const customElements = {
           items += ` - Intervention type: ${recommendation.intervention_type}`;
           items += '</div></div>';
         }
+
+        items += `<div class="row hover" data-index="${recommendation.index}">`;
 
         items += recommendationArrowsLine(recommendation, true, true);
 

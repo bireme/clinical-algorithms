@@ -22,10 +22,6 @@ export class CustomSelect {
     this.customSelectWrapper = document.getElementById(this.customSelectId);
   }
 
-  private reset() {
-    this.selectedItem = null;
-  }
-
   static createClearButton(clearButtonClassName: string) {
     const clearButton = document.createElement('i');
     clearButton.setAttribute('class', 'q-icon notranslate material-icons q-field__focusable-action');
@@ -36,7 +32,7 @@ export class CustomSelect {
     clearButtonWrapper.classList.add(clearButtonClassName);
     clearButtonWrapper.setAttribute(
       'style',
-      'z-index:99999;position:absolute;top:0;right:8px;font-size:24px;background-color:white',
+      'z-index:100;position:absolute;top:0;right:8px;font-size:24px;background-color:white',
     );
 
     clearButtonWrapper.appendChild(clearButton);

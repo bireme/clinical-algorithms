@@ -1,6 +1,7 @@
 import { reactive } from 'vue';
 import { api } from 'boot/axios';
 import { LocalStorage } from 'quasar';
+import Settings from 'src/services/settings';
 
 export interface IFlowchartCategory {
   id: number,
@@ -286,6 +287,32 @@ class Algorithms {
 
     if (this.data.showEditDialog && this.data.algorithm.id) {
       await this.getAlgorithmCategories();
+    }
+  }
+
+  public async updateAlgorithmsList() {
+    try {
+      const { maintainer, master } = await Settings.getUserRoles();
+
+      const userId = LocalStorage.getItem('user');
+
+      if (
+        this.data.searchCategory
+        || this.data.searchUser
+        || this.data.searchKeyword
+      ) {
+        await this.search();
+      } else if (master) {
+        await this.getAll(true);
+      } else if (maintainer && userId) {
+        await this.getUserAlgorithms(Number(userId));
+      } else {
+        await this.getAll();
+      }
+
+      return Promise.resolve(true);
+    } catch (error) {
+      return Promise.reject(error);
     }
   }
 }
