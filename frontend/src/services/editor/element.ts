@@ -792,7 +792,7 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
       if (this.editor.data.paper && !this.editor.data.readOnly) {
         element.findView(this.editor.data.paper).hideTools();
       } else if (this.editor.data.readOnly) {
-        this.createReadonlyTools(element, false);
+        // this.createReadonlyTools(element, false);
       }
     });
 
@@ -887,7 +887,7 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
               CustomElement.END,
             ].includes(elementType)
           ) {
-            this.createReadonlyTools(element, true);
+            // this.createReadonlyTools(element, true);
           }
         }
       }
@@ -1273,17 +1273,19 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
                 }
 
                 RecommendationElement.attr('comparator_text/text', recommendation.comparator);
-                RecommendationElement.attr('comparator_text', { textWrap: { width: elementWidth * 0.35 } });
+
+                RecommendationElement.attr('comparator_text', { textWrap: { width: 200 } });
+
                 if (recommendation.recommendation_type === FORMAL_RECOMMENDATION) {
-                  RecommendationElement.attr('recommendation_arrows_image/refX', (elementWidth / 2) - 100);
+                  RecommendationElement.attr('recommendation_arrows_image/refX', 230);
                 } else if (recommendation.direction) {
-                  RecommendationElement.attr('recommendation_arrows_image/refX', (elementWidth / 2) - 55);
+                  RecommendationElement.attr('recommendation_arrows_image/refX', 250);
                 }
 
                 RecommendationElement.attr('intervention_text/text', recommendation.intervention);
-                RecommendationElement.attr('intervention_text/refX', (elementWidth / 2) + 100);
+                RecommendationElement.attr('intervention_text/refX', 400);
                 RecommendationElement.attr('intervention_text', { textWrap: { width: elementWidth * 0.35 } });
-                RecommendationElement.attr('intervention_label/refX', (elementWidth / 2) + 100);
+                RecommendationElement.attr('intervention_label/refX', 400);
 
                 if (recommendation.implementation_considerations) {
                   RecommendationElement.attr('implementation_text/text', recommendation.implementation_considerations);
@@ -1631,7 +1633,9 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
 
       const clonedElement = selectedElement.clone();
 
-      clonedElement.prop('props/label', `${labelPrefix} - ${selectedElement.prop('props/label') || ''}`);
+      const newText = `${labelPrefix} - ${selectedElement.prop('props/label') || ''}`;
+
+      clonedElement.prop('props/label', newText.slice(0, 60));
 
       clonedElement.translate(40, 40);
 
@@ -1640,7 +1644,7 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
       this.createTools(clonedElement);
 
       setTimeout(() => {
-        this.editor.element.textarea.setValues([clonedElement]);
+        this.textarea.setValues([clonedElement]);
 
         clonedElement.toFront();
 

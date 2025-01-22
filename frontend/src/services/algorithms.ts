@@ -16,6 +16,7 @@ export interface IAlgorithm {
   author: string,
   version: string,
   categories?: IFlowchartCategory[],
+  public?: number,
   updated_at: string,
 }
 

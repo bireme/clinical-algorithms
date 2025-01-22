@@ -84,6 +84,7 @@ import Editor from 'src/services/editor';
 import ExportPdfButton from 'components/buttons/export-pdf-button.vue';
 
 import {
+  ALGORITHMS_EDITOR,
   ALGORITHMS_MAINTENANCE_INDEX,
   ALGORITHMS_PUBLIC_EDITOR,
   // ALGORITHMS_PUBLIC_EDITOR_PATH,
@@ -92,6 +93,7 @@ import {
 } from 'src/router/routes/algorithms';
 
 import { formatDatetime } from 'src/services/date';
+import { GRAPH_MODE_EDIT } from 'src/services/editor/types';
 
 const route = useRoute();
 const router = useRouter();
@@ -148,7 +150,19 @@ const saveGraph = () => {
 };
 
 const editGraph = async () => {
-  await editor.switchToMode();
+  if (route.name === ALGORITHMS_EDITOR && route.query.preview) {
+    await router.replace({
+      name: ALGORITHMS_EDITOR,
+      query: {
+        id: route.query.id,
+        mode: GRAPH_MODE_EDIT,
+      },
+    });
+
+    setTimeout(() => window.location.reload(), 50);
+  } else {
+    await editor.switchToMode();
+  }
 };
 
 const viewPublicGraph = async () => {

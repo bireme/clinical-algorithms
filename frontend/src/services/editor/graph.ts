@@ -129,7 +129,12 @@ class Graph {
           // reset scroll because of createEventHandlers method
           // that focus on input fields
           // which changes the scroll
-          Editor.setScroll({ x: 0, y: 0 });
+          setTimeout(() => {
+            Editor.setScroll({ x: 0, y: 0 });
+
+            // this.editor.paperDiv?.classList.remove('hidden');
+            document.getElementById('stage-loading-spinner-cover')?.classList.add('hidden');
+          }, 1000);
 
           await this.editor.element.createAllRecommendationsTotals();
 
@@ -397,12 +402,16 @@ class Graph {
 
       if (stageStage) {
         const options = {
+          margin: 0,
           filename: `${this.editor.graph.data.algorithm.title}.pdf`,
           image: { type: 'jpeg', quality: 0.98 },
           jsPDF: {
             orientation: this.data.printSize.width > this.data.printSize.height ? 'landscape' : 'portrait',
             unit: 'px',
-            format: [this.data.printSize.width, this.data.printSize.height],
+            format: [
+              Number(this.data.printSize.width.toFixed(0)),
+              Number(this.data.printSize.height.toFixed(0)),
+            ],
           },
         };
 

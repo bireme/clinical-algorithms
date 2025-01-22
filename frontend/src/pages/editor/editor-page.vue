@@ -88,7 +88,8 @@ import EditorActionsButtons from 'components/editor/editor-actions-buttons.vue';
 import SimpleModal from 'components/modals/simple-modal.vue';
 
 import {
-  ALGORITHMS_MAINTENANCE_INDEX, ALGORITHMS_PUBLIC_EDITOR,
+  ALGORITHMS_EDITOR,
+  ALGORITHMS_MAINTENANCE_INDEX, ALGORITHMS_PUBLIC_EDITOR, ALGORITHMS_PUBLIC_SEARCH,
   ALGORITHMS_SEARCH,
 } from 'src/router/routes/algorithms';
 import { GRAPH_MODE_EDIT, GRAPH_MODE_PUBLIC } from 'src/services/editor/types';
@@ -159,33 +160,47 @@ onBeforeMount(async () => {
 
     const algorithm = await new Algorithms().getAlgorithm(id);
 
-    // public editor will be always in read only mode
-    if (route.name === ALGORITHMS_PUBLIC_EDITOR) {
-      editor.graph.setMode(GRAPH_MODE_PUBLIC);
-      editor.setReadOnly(true);
-    } else if (master) {
-      // master users will see always in edit mode
-      editor.graph.setMode(GRAPH_MODE_EDIT);
-      editor.setReadOnly(false);
-    } else if (
-      // user is not logged (public access)
-      !loggedUserId
-      // the logged user is not the owner...
-      || loggedUserId !== algorithm.user_id
+    if (
+      algorithm.public
+      || mode === GRAPH_MODE_EDIT
+      || route.name === ALGORITHMS_EDITOR
     ) {
-      editor.graph.setMode(GRAPH_MODE_PUBLIC);
-      editor.setReadOnly(true);
+      if (route.name === ALGORITHMS_EDITOR && route.query.preview) {
+        // admin previewing...
+        editor.graph.setMode(GRAPH_MODE_PUBLIC);
+        editor.setReadOnly(true);
+      } else if (route.name === ALGORITHMS_PUBLIC_EDITOR) {
+        // public editor will be always in read only mode
+        editor.graph.setMode(GRAPH_MODE_PUBLIC);
+        editor.setReadOnly(true);
+      } else if (master) {
+        // master users will see always in edit mode
+        editor.graph.setMode(GRAPH_MODE_EDIT);
+        editor.setReadOnly(false);
+      } else if (
+        // user is not logged (public access)
+        !loggedUserId
+        // the logged user is not the owner...
+        || loggedUserId !== algorithm.user_id
+      ) {
+        editor.graph.setMode(GRAPH_MODE_PUBLIC);
+        editor.setReadOnly(true);
+      } else {
+        // not a maintainer OR "public access" or "print viewing"
+        editor.graph.setMode(mode);
+        editor.setReadOnly(!editor.data.isMaintainer || ['public', 'print'].includes(mode));
+      }
+
+      await editor.graph.open(id);
+
+      await editor.init('editor-stage');
+
+      settings.page.setTitle(editor.data.readOnly ? 'Publicación de algoritmo' : 'Editar algoritmo');
     } else {
-      // not a maintainer OR "public access" or "print viewing"
-      editor.graph.setMode(mode);
-      editor.setReadOnly(!editor.data.isMaintainer || ['public', 'print'].includes(mode));
+      await router.push({
+        name: ALGORITHMS_PUBLIC_SEARCH,
+      });
     }
-
-    await editor.graph.open(id);
-
-    await editor.init('editor-stage');
-
-    settings.page.setTitle(editor.data.readOnly ? 'Publicación de algoritmo' : 'Editar algoritmo');
   }
 });
 
