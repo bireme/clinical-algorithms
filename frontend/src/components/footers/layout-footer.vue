@@ -19,3 +19,9 @@ import LogoBiremeWhite from 'src/assets/imgs/logo-bireme-white.png';
 
 const appVersion = computed(() => process.env.APP_VERSION || 0);
 </script>
+
+<style lang="sass">
+@media (max-width: 1500px)
+  .logo-bireme-footer, .powered-by
+    display: none
+</style>

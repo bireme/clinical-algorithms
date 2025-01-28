@@ -191,4 +191,12 @@ const viewPublicGraph = async () => {
   -moz-user-select: none
   -ms-user-select: none
   user-select: none
+
+@media (max-width: 1500px)
+  #updated-at-info
+    left: 130px
+
+@media (max-width: 1300px)
+  #updated-at-info
+    display: none
 </style>
