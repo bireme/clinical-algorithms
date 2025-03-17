@@ -246,7 +246,11 @@ class Graph {
   /**
    * Swap some elements in order to be exported as PDF correctly
    */
-  public async setToPrint() {
+  public async setToPrint(putLogoOnHeader: boolean) {
+    await this.editor.init('editor-stage');
+
+    void this.putLogoOnPdfHeader(putLogoOnHeader);
+
     const allElements = this.editor.element.getAll();
 
     if (allElements.length) {
@@ -261,9 +265,6 @@ class Graph {
           const textarea = this.editor.element.textarea.getFromEditorElement(element.id);
 
           if (textarea) {
-            // deprecated: using props/label instead
-            // const { value } = textarea;
-
             const {
               x,
               y,
@@ -296,6 +297,8 @@ class Graph {
         }
       }
 
+      this.editor.element.createElementsIndexes();
+
       await this.editor.element.createRecommendationsForPDF();
 
       this.editor.element.moveAllElementsDown(250);
@@ -305,6 +308,10 @@ class Graph {
       await this.editor.element.create.PDFHeader();
 
       await this.editor.element.create.PDFFooter();
+
+      this.editor.element.redrawAllConnections();
+
+      this.editor.element.addElementsIndexesToPaper();
     }
   }
 

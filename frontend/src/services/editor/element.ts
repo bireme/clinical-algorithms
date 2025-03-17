@@ -1746,14 +1746,30 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
       for (const element of allElements) {
         const elementType = element.prop('type');
 
-        if ([
-          CustomElement.ACTION,
-          CustomElement.EVALUATION,
-        ].includes(elementType)) {
-          const {
-            x,
-            y,
-          } = element.position();
+        if ([CustomElement.ACTION, CustomElement.EVALUATION].includes(elementType)) {
+          const metadata = this.editor.metadata.getFromElement(element);
+
+          if (metadata && metadata.fixed.length) {
+            element.prop('props/elementIndex', elementIndex);
+
+            elementIndex += 1;
+          }
+        }
+      }
+    }
+  }
+
+  public addElementsIndexesToPaper() {
+    const allElements = this.editor.element.getAll();
+
+    if (allElements.length) {
+      let elementIndex = 1;
+
+      for (const element of allElements) {
+        const elementType = element.prop('type');
+
+        if ([CustomElement.ACTION, CustomElement.EVALUATION].includes(elementType)) {
+          const { x, y } = element.position();
 
           const metadata = this.editor.metadata.getFromElement(element);
 
@@ -1779,8 +1795,6 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
             indexElement.resize(24, 24);
 
             indexElement.addTo(this.editor.data.graph);
-
-            element.prop('props/elementIndex', elementIndex);
 
             elementIndex += 1;
           }

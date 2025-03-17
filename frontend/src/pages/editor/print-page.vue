@@ -55,20 +55,12 @@ onMounted(async () => {
 
     await editor.graph.open(id);
 
-    await editor.init('editor-stage');
-
-    void editor.graph.putLogoOnPdfHeader(putLogoOnHeader);
-
-    await editor.graph.setToPrint();
+    await editor.graph.setToPrint(putLogoOnHeader);
 
     setTimeout(async () => {
       loading.value = false;
 
       editor.element.hideAllPorts();
-
-      editor.element.redrawAllConnections();
-
-      editor.element.createElementsIndexes();
 
       editor.graph.exportPDF();
     }, 2000);
