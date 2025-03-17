@@ -87,7 +87,6 @@ import {
   ALGORITHMS_EDITOR,
   ALGORITHMS_MAINTENANCE_INDEX,
   ALGORITHMS_PUBLIC_EDITOR,
-  // ALGORITHMS_PUBLIC_EDITOR_PATH,
   ALGORITHMS_PUBLIC_SEARCH,
   ALGORITHMS_SEARCH,
 } from 'src/router/routes/algorithms';
@@ -173,8 +172,7 @@ const viewPublicGraph = async () => {
       await editor.graph.save();
     }
 
-    // await editor.switchToMode();
-    Editor.preview(route.query.id);
+    Editor.preview(Number(route.query.id));
   }
 };
 </script>

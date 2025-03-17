@@ -8,7 +8,7 @@
       <!--<div style="position:absolute">
         mode: {{ editor.graph.data.mode }} - read only: {{ editor.data.readOnly }}
       </div>-->
-      <editor-stage-header />
+      <editor-stage-header/>
 
       <zooming-bar
         class="absolute-top-right"
@@ -33,13 +33,13 @@
       />
 
       <!-- STAGE -->
-      <editor-stage />
+      <editor-stage/>
 
       <!-- METADATA -->
-      <editor-metadata-panel />
+      <editor-metadata-panel/>
 
       <!-- ACTIONS -->
-      <editor-actions-buttons />
+      <editor-actions-buttons/>
     </div>
 
     <simple-modal
@@ -89,7 +89,9 @@ import SimpleModal from 'components/modals/simple-modal.vue';
 
 import {
   ALGORITHMS_EDITOR,
-  ALGORITHMS_MAINTENANCE_INDEX, ALGORITHMS_PUBLIC_EDITOR, ALGORITHMS_PUBLIC_SEARCH,
+  ALGORITHMS_MAINTENANCE_INDEX,
+  ALGORITHMS_PUBLIC_EDITOR,
+  ALGORITHMS_PUBLIC_SEARCH,
   ALGORITHMS_SEARCH,
 } from 'src/router/routes/algorithms';
 import { GRAPH_MODE_EDIT, GRAPH_MODE_PUBLIC } from 'src/services/editor/types';
@@ -194,6 +196,12 @@ onBeforeMount(async () => {
       await editor.graph.open(id);
 
       await editor.init('editor-stage');
+
+      if (editor.data.readOnly) {
+        editor.graph.cropToContent(500, 600);
+
+        editor.element.hideAllPorts();
+      }
 
       settings.page.setTitle(editor.data.readOnly ? 'Publicación de algoritmo' : 'Editar algoritmo');
     } else {

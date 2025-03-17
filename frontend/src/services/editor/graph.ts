@@ -1,5 +1,4 @@
 import { reactive } from 'vue';
-import * as joint from 'jointjs';
 import { api } from 'boot/axios';
 import html2pdf from 'html2pdf.js';
 
@@ -126,16 +125,6 @@ class Graph {
             }, 200);
           }
 
-          // reset scroll because of createEventHandlers method
-          // that focus on input fields
-          // which changes the scroll
-          setTimeout(() => {
-            Editor.setScroll({ x: 0, y: 0 });
-
-            // this.editor.paperDiv?.classList.remove('hidden');
-            document.getElementById('stage-loading-spinner-cover')?.classList.add('hidden');
-          }, 1000);
-
           await this.editor.element.createAllRecommendationsTotals();
 
           // READ ONLY MODE
@@ -154,11 +143,24 @@ class Graph {
                 this.editor.element.select(String(this.editor.route.query.node));
 
                 this.editor.element.centerViewOnSelected();
-              }, 1000);
+              }, 1501);
             }
           }
         }
       }
+
+      // reset scroll because of createEventHandlers method
+      // that focus on input fields
+      // which changes the scroll
+      setTimeout(() => {
+        Editor.setScroll({ x: 0, y: 0 });
+
+        if (document.activeElement && document.activeElement instanceof HTMLElement) {
+          document.activeElement.blur();
+        }
+
+        document.getElementById('stage-loading-spinner-cover')?.classList.add('hidden');
+      }, 1500);
 
       return Promise.resolve(true);
     } catch (error) {
@@ -248,8 +250,6 @@ class Graph {
     const allElements = this.editor.element.getAll();
 
     if (allElements.length) {
-      let elementIndex = 1;
-
       for (const element of allElements) {
         const elementType = element.prop('type');
 
@@ -272,35 +272,6 @@ class Graph {
             textarea.remove();
 
             this.editor.element.create.PrintLabel({ x, y, text: label });
-
-            const metadata = this.editor.metadata.getFromElement(element);
-
-            if (metadata && metadata.fixed.length) {
-              const indexElement = new joint.shapes.standard.Rectangle();
-
-              if (elementType === CustomElement.ACTION) {
-                indexElement.position(x, y - 30);
-              } else if (elementType === CustomElement.EVALUATION) {
-                indexElement.position(x + 32, y - 28);
-              }
-
-              indexElement.attr('body/stroke', 'black');
-              indexElement.attr('body/strokeWidth', 1);
-              indexElement.attr('body/rx', 2);
-              indexElement.attr('body/ry', 2);
-              indexElement.attr('label/text', elementIndex);
-              indexElement.attr('label/text-anchor', 'center');
-              indexElement.attr('label/style', 'font-size: 16px; border: 1px solid #F00');
-              indexElement.attr('label/ref-x', elementIndex > 9 ? -9 : -5);
-              indexElement.attr('label/ref-y', 1);
-
-              indexElement.resize(24, 24);
-              indexElement.addTo(this.editor.data.graph);
-
-              element.prop('props/elementIndex', elementIndex);
-
-              elementIndex += 1;
-            }
           }
         } else if (elementType === CustomElement.RECOMMENDATION_TOGGLER) {
           element.remove();
@@ -327,7 +298,7 @@ class Graph {
 
       await this.editor.element.createRecommendationsForPDF();
 
-      this.editor.element.moveAllElementsDown(200);
+      this.editor.element.moveAllElementsDown(250);
 
       this.cropToContent();
 
@@ -337,8 +308,8 @@ class Graph {
     }
   }
 
-  private cropToContent() {
-    this.setContentSize();
+  public cropToContent(shiftX = 200, shiftY = 200) {
+    this.setContentSize(shiftX, shiftY);
 
     this.editor.data.paper?.setDimensions(this.data.printSize.width, this.data.printSize.height);
   }
@@ -391,9 +362,9 @@ class Graph {
     return coordinate === 'x' ? outerX : lowerY;
   }
 
-  private setContentSize() {
-    this.data.printSize.width = this.getOutermostCoordinate('x') + 200;
-    this.data.printSize.height = this.getOutermostCoordinate('y') + 200;
+  private setContentSize(shiftX: number, shiftY: number) {
+    this.data.printSize.width = this.getOutermostCoordinate('x') + shiftX;
+    this.data.printSize.height = this.getOutermostCoordinate('y') + shiftY;
   }
 
   public exportPDF() {

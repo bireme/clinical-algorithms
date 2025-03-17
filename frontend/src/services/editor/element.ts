@@ -752,6 +752,8 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
         link.router('manhattan', {
           step: 10,
           padding: 40,
+          excludeTypes: ['standard.Rectangle'],
+          excludeEnds: ['source'],
         });
 
         link.connector('straight', {
@@ -789,7 +791,10 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
     // remove stroke from the selected element
     elements.forEach((element) => {
       // hide element tools
-      if (this.editor.data.paper && !this.editor.data.readOnly) {
+      if (
+        this.editor.data.paper
+        && !this.editor.data.readOnly
+      ) {
         element.findView(this.editor.data.paper).hideTools();
       } else if (this.editor.data.readOnly) {
         // this.createReadonlyTools(element, false);
@@ -1719,6 +1724,68 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
       element.prop('ports/groups/bottom/attrs/portBody/fill', 'transparent');
       element.prop('ports/groups/in/attrs/portBody/fill', 'transparent');
       element.prop('ports/groups/out/attrs/portBody/fill', 'transparent');
+    }
+  }
+
+  public hideAllPorts() {
+    const allElements = this.getAll();
+
+    for (const element of allElements) {
+      if (this.isAction(element) || this.isEvaluation(element)) {
+        this.hidePorts(element.id);
+      }
+    }
+  }
+
+  public createElementsIndexes() {
+    const allElements = this.editor.element.getAll();
+
+    if (allElements.length) {
+      let elementIndex = 1;
+
+      for (const element of allElements) {
+        const elementType = element.prop('type');
+
+        if ([
+          CustomElement.ACTION,
+          CustomElement.EVALUATION,
+        ].includes(elementType)) {
+          const {
+            x,
+            y,
+          } = element.position();
+
+          const metadata = this.editor.metadata.getFromElement(element);
+
+          if (metadata && metadata.fixed.length) {
+            const indexElement = new joint.shapes.standard.Rectangle();
+
+            if (elementType === CustomElement.ACTION) {
+              indexElement.position(x, y - 30);
+            } else if (elementType === CustomElement.EVALUATION) {
+              indexElement.position(x + 32, y - 28);
+            }
+
+            indexElement.attr('body/stroke', 'black');
+            indexElement.attr('body/strokeWidth', 1);
+            indexElement.attr('body/rx', 2);
+            indexElement.attr('body/ry', 2);
+            indexElement.attr('label/text', elementIndex);
+            indexElement.attr('label/text-anchor', 'center');
+            indexElement.attr('label/style', 'font-size: 16px; border: 1px solid #F00');
+            indexElement.attr('label/ref-x', elementIndex > 9 ? -9 : -5);
+            indexElement.attr('label/ref-y', 1);
+
+            indexElement.resize(24, 24);
+
+            indexElement.addTo(this.editor.data.graph);
+
+            element.prop('props/elementIndex', elementIndex);
+
+            elementIndex += 1;
+          }
+        }
+      }
     }
   }
 }

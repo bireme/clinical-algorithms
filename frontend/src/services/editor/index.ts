@@ -192,29 +192,29 @@ class Editor {
         });
 
         this.data.paper.on('element:pointerup', (elementView: dia.ElementView) => {
-          if (elementView.options.model.prop('type') === CustomElement.RECOMMENDATION_TOGGLER) {
-            this.element.toggleRecommendation(elementView.options.model.id);
-          } else if (
-            // not in print mode (PDF export)
-            this.graph.data.mode !== GRAPH_MODE_PRINT
-            // do not select [lane, recommendation_toggler] element if it's in read only mode
-            && !(
-              this.data.readOnly
-              && elementView.options.model.prop('type') === CustomElement.LANE
-            )
-            // cannot interact with RECOMMENDATION_TOTAL elements at all
-            && elementView.options.model.prop('type') !== CustomElement.RECOMMENDATION_TOTAL
-          ) {
-            this.element.select(elementView.options.model.id);
-          }
+          // not in print mode (PDF export)
+          if (this.graph.data.mode !== GRAPH_MODE_PRINT) {
+            if (elementView.options.model.prop('type') === CustomElement.RECOMMENDATION_TOGGLER) {
+              this.element.toggleRecommendation(elementView.options.model.id);
+            } else if (
+              !(
+                this.data.readOnly
+                && elementView.options.model.prop('type') === CustomElement.LANE
+              )
+              // cannot interact with RECOMMENDATION_TOTAL elements at all
+              && elementView.options.model.prop('type') !== CustomElement.RECOMMENDATION_TOTAL
+            ) {
+              this.element.select(elementView.options.model.id);
+            }
 
-          // redraw recommendations totals after stop moving
-          if (this.element.data.wasMoving) {
-            this.element.updateRecommendationsTotals();
+            // redraw recommendations totals after stop moving
+            if (this.element.data.wasMoving) {
+              this.element.updateRecommendationsTotals();
 
-            this.element.data.wasMoving = false;
+              this.element.data.wasMoving = false;
 
-            this.element.redrawAllConnections();
+              this.element.redrawAllConnections();
+            }
           }
         });
 
