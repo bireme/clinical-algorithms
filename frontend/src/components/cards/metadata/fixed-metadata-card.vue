@@ -20,7 +20,7 @@
             {{ props.hideIndex ? '' : `${fixedMetadata.index}. ` }}{{
               fixedMetadata.recommendation_type ?
                 getRecommendationTypeLabel(fixedMetadata.recommendation_type)
-                : 'Recommendation type was not selected'
+                : 'No se seleccionó el tipo de recomendación'
             }}
           </div>
         </div>
@@ -41,8 +41,8 @@
               <div class="col-7">
                 <div class="full-width full-height flex items-center justify-center">
                   <div class="text-center text-white">
-                    <div><b>Intervention type</b></div>
-                    <div>{{ fixedMetadata.intervention_type }}</div>
+                    <div><b>Tipo de intervención</b></div>
+                    <div>{{ translateInterventionType(fixedMetadata.intervention_type) }}</div>
                   </div>
                 </div>
               </div>
@@ -84,11 +84,11 @@
             justify-center text-center text-white">
               <div>
                 <div>
-                  <b>Certainty of evidence</b>
+                  <b>Certeza de la evidencia</b>
                 </div>
 
                 <div>
-                  {{ fixedMetadata.certainty_of_the_evidence }} <q-img
+                  {{ translateCertainty(fixedMetadata.certainty_of_the_evidence) }} <q-img
                   v-for="index in certaintyRange"
                   :src="CertaintyIcon"
                   :key="`certainty${index}`"
@@ -105,7 +105,7 @@
           v-if="fixedMetadata.description"
           class="q-pt-md"
         >
-          <div class="text-primary"><b>Original transcription</b></div>
+          <div class="text-primary"><b>Transcripción original</b></div>
 
           <div>{{ fixedMetadata.description }}</div>
         </div>
@@ -140,7 +140,7 @@
             v-if="fixedMetadata.implementation_considerations"
             class="q-pb-lg"
           >
-            <div class="q-pb-sm text-primary"><b>Implementation considerations</b></div>
+            <div class="q-pb-sm text-primary"><b>Consideraciones de implementación</b></div>
 
             <div>{{ fixedMetadata.implementation_considerations }}</div>
           </div>
@@ -149,7 +149,7 @@
             v-if="fixedMetadata.additional_comments"
             class="q-pb-lg"
           >
-            <div class="q-pb-sm text-primary"><b>Additional comments</b></div>
+            <div class="q-pb-sm text-primary"><b>Comentarios adicionales</b></div>
 
             <div>{{ fixedMetadata.additional_comments }}</div>
           </div>
@@ -158,7 +158,7 @@
             v-if="fixedMetadata.recommendation_source"
             class="q-pb-lg"
           >
-            <div class="q-pb-sm text-primary"><b>Recommendation source</b></div>
+            <div class="q-pb-sm text-primary"><b>Fuente de recomendación</b></div>
 
             <div>{{ fixedMetadata.recommendation_source }}</div>
           </div>
@@ -166,14 +166,14 @@
       </div>
 
       <q-separator
-        v-if="fixedMetadata.links.length"
+        v-if="fixedMetadata.links && fixedMetadata.links.length"
       />
 
       <div
-        v-if="fixedMetadata.links.length"
+        v-if="fixedMetadata.links && fixedMetadata.links.length"
         class="q-pa-lg"
       >
-        <div class="q-pb-sm text-primary"><b>Links</b></div>
+        <div class="q-pb-sm text-primary"><b>Enlaces</b></div>
 
         <q-card
           v-for="link of fixedMetadata.links"
@@ -225,8 +225,8 @@ import DiagnosisIcon from 'src/assets/imgs/diagnosis.png';
 import TreatmentIcon from 'src/assets/imgs/treatment_2.png';
 import PopulationClassificationIcon from 'src/assets/imgs/population_classification.png';
 
-import { INTERVENTION_TYPES } from 'src/services/editor/constants/metadata/intervention';
-import { CERTAINTY } from 'src/services/editor/constants/metadata/certainty';
+import { INTERVENTION_TYPES, translateInterventionType } from 'src/services/editor/constants/metadata/intervention';
+import { CERTAINTY, translateCertainty } from 'src/services/editor/constants/metadata/certainty';
 import { orderRecommendations } from 'src/services/recommendations';
 
 const editor = inject('editor') as Editor;

@@ -479,6 +479,14 @@ class Metadata {
     this.data.hasPendency = false;
   }
 
+  static hasValidFixedMetadata(fixedMetadata: IFixedMetadata[]) {
+    return fixedMetadata
+      && fixedMetadata.length
+      && fixedMetadata.find(
+        (recommendation) => recommendation.comparator && recommendation.comparator,
+      );
+  }
+
   public hasTypePendency(element: dia.Element, type: string) {
     const metadata = this.getFromElement(element);
 

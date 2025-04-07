@@ -1,15 +1,11 @@
 <template>
   <div class="q-pl-lg" style="margin-top:20px">
     <div class="inline-block q-mr-xl">
-      <b>Title:</b> {{ algorithm.title }}
+      <b>Título:</b> {{ algorithm.title }}
     </div>
 
-<!--    <div class="inline-block q-mr-xl">-->
-<!--      <b>Version:</b> {{ algorithm.version }}-->
-<!--    </div>-->
-
     <div class="inline-block">
-      <b class="q-mr-sm">Categories:</b>
+      <b class="q-mr-sm">Categorías:</b>
       <span v-if="!algorithmCategories">No hay categorías definidas.</span>
       <span v-else>
         <q-chip

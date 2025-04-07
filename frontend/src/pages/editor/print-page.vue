@@ -27,15 +27,14 @@
 
 <script setup lang="ts">
 import { onMounted, inject, ref } from 'vue';
-
 import { useRoute } from 'vue-router';
 
-const route = useRoute();
-
-import EditorStage from 'components/editor/editor-stage.vue';
-import Editor from 'src/services/editor';
 import { GRAPH_MODE_PRINT } from 'src/services/editor/types';
+import Editor from 'src/services/editor';
 import LoadingSpinner from 'components/spinners/loading-spinner.vue';
+import EditorStage from 'components/editor/editor-stage.vue';
+
+const route = useRoute();
 
 const editor = inject('editor') as Editor;
 

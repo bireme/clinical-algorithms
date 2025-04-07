@@ -20,5 +20,5 @@ export interface IFixedMetadata {
   additional_comments: string,
   recommendation_source: string,
   links: IFixedMetadataLink[],
-  recommendationElementId: dia.Cell.ID,
+  recommendationElementId?: dia.Cell.ID,
 }

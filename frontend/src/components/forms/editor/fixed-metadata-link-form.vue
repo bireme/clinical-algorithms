@@ -3,7 +3,7 @@
     <q-card-section class="q-pa-none">
       <div class="q-px-md">
         <div class="q-pt-md q-mb-sm">
-          Link #{{ props.linkIndex }}
+          Enlace #{{ props.linkIndex }}
         </div>
 
         <q-input
@@ -18,7 +18,7 @@
             v-model="data.type"
             :options="['Full text', 'BIG database', 'BIGREC database']"
             class="q-mt-lg"
-            label="Link type"
+            label="Tipo de enlace"
             dense
           />
         </div>

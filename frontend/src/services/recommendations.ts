@@ -163,9 +163,9 @@ export const recommendationArrowsLine = (
 
   items += '<div class="col-4 flex items-center text-caption q-pa-sm">';
   if (coloredTitles) {
-    items += `<div><b class="text-primary">Comparator:</b><br/>${recommendation.comparator}</div>`;
+    items += `<div><b class="text-primary">Comparador:</b><br/>${recommendation.comparator}</div>`;
   } else {
-    items += `<div><b>Comparator:</b><br/>${recommendation.comparator}</div>`;
+    items += `<div><b>Comparador:</b><br/>${recommendation.comparator}</div>`;
   }
   items += '</div>';
 
@@ -183,9 +183,9 @@ export const recommendationArrowsLine = (
 
   items += '<div class="col-4 flex items-center text-caption q-pa-sm">';
   if (coloredTitles) {
-    items += `<div><b class="text-primary">Intervention:</b><br/>${recommendation.intervention}</div>`;
+    items += `<div><b class="text-primary">Intervención:</b><br/>${recommendation.intervention}</div>`;
   } else {
-    items += `<div><b>Intervention:</b><br/>${recommendation.intervention}</div>`;
+    items += `<div><b>Intervención:</b><br/>${recommendation.intervention}</div>`;
   }
   items += '</div>';
 

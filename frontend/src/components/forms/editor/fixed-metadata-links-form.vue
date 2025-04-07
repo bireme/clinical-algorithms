@@ -3,14 +3,14 @@
     <div class="q-pb-md">
       <q-btn
         class="float-right"
-        label="New link"
+        label="Añadir enlace"
         color="primary"
         no-caps
         push
         @click="addLink"
       />
 
-      <div class="q-pt-sm">Links</div>
+      <div class="q-pt-sm">Enlaces</div>
     </div>
 
     <metadata-link-form

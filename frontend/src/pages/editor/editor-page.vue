@@ -5,9 +5,6 @@
     class="bg-grey-4 overflow-hidden"
   >
     <div id="editor-header">
-      <!--<div style="position:absolute">
-        mode: {{ editor.graph.data.mode }} - read only: {{ editor.data.readOnly }}
-      </div>-->
       <editor-stage-header/>
 
       <zooming-bar
@@ -160,7 +157,7 @@ onBeforeMount(async () => {
 
     const loggedUserId = LocalStorage.getItem('user');
 
-    const algorithm = await new Algorithms().getAlgorithm(id);
+    const algorithm = await new Algorithms().getAlgorithm(Number(id));
 
     if (
       algorithm.public
@@ -198,10 +195,11 @@ onBeforeMount(async () => {
       await editor.init('editor-stage');
 
       if (editor.data.readOnly) {
-        editor.graph.cropToContent(500, 600);
-
-        editor.element.hideAllPorts();
+        editor.graph.cropToContent(1000, 600);
       }
+
+      // avoid ports to start visible...
+      editor.element.hideAllPorts();
 
       settings.page.setTitle(editor.data.readOnly ? 'Publicación de algoritmo' : 'Editar algoritmo');
     } else {

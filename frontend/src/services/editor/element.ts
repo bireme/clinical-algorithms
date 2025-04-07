@@ -16,6 +16,8 @@ import { reactive } from 'vue';
 import { autoResizeTextarea } from 'src/services/editor/textarea';
 import icons from 'src/services/editor/elements/svg_icons';
 
+import { CERTAINTY } from 'src/services/editor/constants/metadata/certainty';
+
 import {
   getRecommendationTypeLabel,
   FORMAL_RECOMMENDATION,
@@ -34,8 +36,8 @@ import {
   RecommendationDescriptionHeaderConstructor,
 } from 'src/services/editor/elements/recommendation-element';
 
+import Metadata from 'src/services/editor/metadata';
 import { orderRecommendations } from 'src/services/recommendations';
-import { CERTAINTY } from 'src/services/editor/constants/metadata/certainty';
 import { IFixedMetadata } from 'src/services/editor/constants/metadata';
 import { COLOR_ACCENT } from 'src/services/colors';
 
@@ -451,7 +453,7 @@ class Element {
       Recommendation: async (x: number, y: number, originalElement: dia.Element) => {
         const metadata = this.editor.metadata.getFromElement(originalElement);
 
-        if (metadata && metadata.fixed) {
+        if (metadata && Metadata.hasValidFixedMetadata(metadata.fixed)) {
           const divId = randomString(32);
 
           const RecommendationElement = customElements.RecommendationElement(metadata.fixed, divId);
@@ -752,7 +754,12 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
         link.router('manhattan', {
           step: 10,
           padding: 40,
-          excludeTypes: ['standard.Rectangle'],
+          excludeTypes: [
+            'standard.Rectangle',
+            'RecommendationElement',
+            'RecommendationTotalElement',
+            'RecommendationTogglerElement',
+          ],
           excludeEnds: ['source'],
         });
 
@@ -829,6 +836,8 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
       .find((element) => element.id === id);
   }
 
+  /*
+   * PROBABLY DEPRECATED
   private createReadonlyTools(element: dia.Element, showBoundary: boolean) {
     if (this.editor.data.paper) {
       const allTools: (joint.elementTools.Button | joint.elementTools.Boundary)[] = [];
@@ -856,6 +865,7 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
       elementView.addTools(toolsView);
     }
   }
+  */
 
   public select(elementId: dia.Cell.ID) {
     // this.deselectAll();
@@ -1147,7 +1157,7 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
   }
 
   public async createRecommendationsForPDF() {
-    const elementWidth = this.editor.graph.getOutermostCoordinate('x') + 130;
+    const elementWidth = this.editor.graph.getOutermostCoordinate('x') + 330;
     let elementHeight = 1000;
     let outermostY = this.editor.graph.getOutermostCoordinate('y') + 50;
 

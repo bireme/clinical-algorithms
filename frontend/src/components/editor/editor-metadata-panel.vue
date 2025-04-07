@@ -176,7 +176,7 @@ watch(() => editor.element.data.selectedId, (value) => {
 
     setTimeout(() => {
       editor.metadata.openMetadataPanel();
-    }, 10);
+    }, 100);
   }
 });
 

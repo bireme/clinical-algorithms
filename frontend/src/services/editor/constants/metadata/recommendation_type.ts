@@ -1,4 +1,9 @@
-import { INTERVENTION_TYPES } from 'src/services/editor/constants/metadata/intervention';
+import {
+  DIAGNOSIS,
+  TREATMENT,
+  POPULATION_CLASSIFICATION,
+} from 'src/services/editor/constants/metadata/intervention';
+
 import { toDataUrl } from 'src/services/images';
 
 export const FORMAL_RECOMMENDATION = 'formal';
@@ -8,15 +13,15 @@ export const GOOD_PRACTICES = 'good_practices';
 export const RECOMMENDATION_TYPES = [
   {
     value: FORMAL_RECOMMENDATION,
-    label: 'Formal recommendation',
+    label: 'Recomendación formal',
   },
   {
     value: GOOD_PRACTICES,
-    label: 'Good practice statement',
+    label: 'Declaración de buenas prácticas',
   },
   {
     value: INFORMAL_RECOMMENDATION,
-    label: 'Informal recommendation',
+    label: 'Recomendación informal',
   },
 ];
 
@@ -31,11 +36,11 @@ export const getRecommendationTypeLabel = (recommendationType: string) => {
 export const getRecommendationTypeIcon = (type: string) => {
   let url = './imgs/intervention_type_icons/';
 
-  if (type === INTERVENTION_TYPES.DIAGNOSIS) {
+  if (type === DIAGNOSIS) {
     url += 'diagnosis.png';
-  } else if (type === INTERVENTION_TYPES.TREATMENT) {
+  } else if (type === TREATMENT) {
     url += 'treatment.png';
-  } else if (type === INTERVENTION_TYPES.POPULATION_CLASSIFICATION) {
+  } else if (type === POPULATION_CLASSIFICATION) {
     url += 'population_classification.png';
   }
 
@@ -45,11 +50,11 @@ export const getRecommendationTypeIcon = (type: string) => {
 export const getRecommendationTypeIconBase64 = async (type: string) => {
   let url = '/imgs/intervention_type_icons/';
 
-  if (type === INTERVENTION_TYPES.DIAGNOSIS) {
+  if (type === DIAGNOSIS) {
     url += 'diagnosis.png';
-  } else if (type === INTERVENTION_TYPES.TREATMENT) {
+  } else if (type === TREATMENT) {
     url += 'treatment.png';
-  } else if (type === INTERVENTION_TYPES.POPULATION_CLASSIFICATION) {
+  } else if (type === POPULATION_CLASSIFICATION) {
     url += 'population_classification.png';
   }
 

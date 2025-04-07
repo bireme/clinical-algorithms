@@ -5,14 +5,14 @@ export const BOTH = 'both';
 export const DIRECTIONS = [
   {
     value: IN_FAVOR_OF_THE_INTERVENTION,
-    label: 'In favor of the intervention',
+    label: 'A favor de la intervención',
   },
   {
     value: AGAINST_THE_INTERVENTION,
-    label: 'Against the intervention',
+    label: 'Contra la intervención',
   },
   {
     value: BOTH,
-    label: 'Both',
+    label: 'Ambas',
   },
 ];

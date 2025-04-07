@@ -27,19 +27,19 @@ export enum CustomElement {
 export const elementName: {
   [key: string]: string,
 } = {
-  [CustomElement.START]: 'Start',
-  [CustomElement.ACTION]: 'Action',
-  [CustomElement.EVALUATION]: 'Evaluation',
-  [CustomElement.RECOMMENDATION]: 'Recommendation',
-  [CustomElement.RECOMMENDATION_TOTAL]: 'RecommendationTotal',
-  [CustomElement.RECOMMENDATION_TOGGLER]: 'RecommendationToggler',
-  [CustomElement.RECOMMENDATION_DESCRIPTION]: 'RecommendationDescription',
-  [CustomElement.RECOMMENDATION_DESCRIPTION_HEADER]: 'RecommendationDescriptionHeader',
-  [CustomElement.END]: 'End',
-  [CustomElement.LINK]: 'Link',
-  [CustomElement.LANE]: 'Time',
-  [CustomElement.PDF_HEADER]: 'PDFHeader',
-  [CustomElement.PDF_FOOTER]: 'PDFFooter',
+  [CustomElement.START]: 'Inizio',
+  [CustomElement.ACTION]: 'Acción',
+  [CustomElement.EVALUATION]: 'Evaluación',
+  [CustomElement.RECOMMENDATION]: 'Recomendación',
+  [CustomElement.RECOMMENDATION_TOTAL]: 'Recomendaciones totales',
+  [CustomElement.RECOMMENDATION_TOGGLER]: 'Alternador de recomendaciones',
+  [CustomElement.RECOMMENDATION_DESCRIPTION]: 'Descripción de la recomendación',
+  [CustomElement.RECOMMENDATION_DESCRIPTION_HEADER]: 'Encabezado de descripción de la recomendación',
+  [CustomElement.END]: 'Fin',
+  [CustomElement.LINK]: 'Enlace',
+  [CustomElement.LANE]: 'Tiempo',
+  [CustomElement.PDF_HEADER]: 'Encabezado de PDF',
+  [CustomElement.PDF_FOOTER]: 'Pie de página del PDF',
 };
 
 export const ROUND_PORT = {
@@ -199,7 +199,7 @@ const customElements = {
         ) {
           items += '<div class="row full-width bg-grey-2"><div class="col-12 text-center recommendation-title">';
           items += getRecommendationTypeLabel(recommendation.recommendation_type);
-          items += ` - Intervention type: ${recommendation.intervention_type}`;
+          items += ` - Tipo de intervención: ${recommendation.intervention_type}`;
           items += '</div></div>';
         }
 
@@ -411,10 +411,6 @@ const customElements = {
   }),
 
   [CustomElement.END]: joint.dia.Element.define(CustomElement.END, {
-    // size: {
-    //   width: 40,
-    //   height: 40,
-    // },
     attrs: {
       body: {
         width: 'calc(w)',
@@ -425,15 +421,6 @@ const customElements = {
         stroke: '#FF0000',
         strokeWidth: 3,
       },
-      // body: {
-      //   width: 40,
-      //   height: 40,
-      //   rx: 25,
-      //   ry: 25,
-      //   fill: 'white',
-      //   stroke: '#FF0000',
-      //   strokeWidth: 3,
-      // },
     },
   }, {
     markup: [{

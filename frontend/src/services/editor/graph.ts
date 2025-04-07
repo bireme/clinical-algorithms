@@ -303,7 +303,7 @@ class Graph {
 
       this.editor.element.moveAllElementsDown(250);
 
-      this.cropToContent();
+      this.cropToContent(400, 200);
 
       await this.editor.element.create.PDFHeader();
 
@@ -381,8 +381,8 @@ class Graph {
       if (stageStage) {
         const options = {
           margin: 0,
-          filename: `${this.editor.graph.data.algorithm.title}.pdf`,
-          image: { type: 'jpeg', quality: 0.98 },
+          filename: `${this.editor.graph.data.algorithm.title} - ${new Date().toString()}.pdf`,
+          image: { type: 'jpeg', quality: 0.7 },
           jsPDF: {
             orientation: this.data.printSize.width > this.data.printSize.height ? 'landscape' : 'portrait',
             unit: 'px',

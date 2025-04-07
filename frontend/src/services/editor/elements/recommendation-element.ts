@@ -38,7 +38,7 @@ const defaults = {
       style: 'font-weight: bold',
       refX: 15,
       refY: 70,
-      text: 'Intervention type',
+      text: 'Tipo de intervención',
     },
     intervention_type_text: {
       refX: 15,
@@ -54,7 +54,7 @@ const defaults = {
       style: 'font-weight: bold',
       refX: 330,
       refY: 70,
-      text: 'Certainty of evidence',
+      text: 'Certeza de la evidencia',
     },
     certainty_text: {
       refX: 330,
@@ -88,7 +88,7 @@ const defaults = {
       style: 'font-weight: bold',
       refX: 15,
       refY: 125,
-      text: 'Original transcription',
+      text: 'Transcripción original',
     },
     original_transcription_text: {
       style: 'line-height: 200%;',
@@ -99,7 +99,7 @@ const defaults = {
       style: 'font-weight: bold',
       refX: 15,
       refY: 200,
-      text: 'Comparator',
+      text: 'Comparador',
     },
     comparator_text: {
       style: 'line-height: 200%;',
@@ -110,7 +110,7 @@ const defaults = {
       style: 'font-weight: bold',
       refX: 600,
       refY: 200,
-      text: 'Intervention',
+      text: 'Intervención',
     },
     intervention_text: {
       style: 'line-height: 200%;',
@@ -126,7 +126,7 @@ const defaults = {
       style: 'font-weight: bold',
       refX: 15,
       refY: 260,
-      text: 'Implementation consideration',
+      text: 'Consideración de implementación',
     },
     implementation_text: {
       refX: 15,
@@ -136,7 +136,7 @@ const defaults = {
       style: 'font-weight: bold',
       refX: 15,
       refY: 260,
-      text: 'Additional comments',
+      text: 'Comentarios adicionales',
     },
     additional_comments_text: {
       refX: 15,
@@ -146,7 +146,7 @@ const defaults = {
       style: 'font-weight: bold',
       refX: 15,
       refY: 260,
-      text: 'Recommendation source',
+      text: 'Fuente de recomendación',
     },
     recommendation_source_text: {
       refX: 15,
@@ -156,7 +156,7 @@ const defaults = {
       style: 'font-weight: bold',
       refX: 15,
       refY: 260,
-      text: 'Links',
+      text: 'Enlaces',
     },
     links_text: {
       refX: 15,
