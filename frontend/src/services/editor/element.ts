@@ -469,15 +469,13 @@ class Element {
 
           recommendationElement.attr('./display', 'none');
 
-          setTimeout(() => {
-            recommendationElement.addTo(this.editor.data.graph);
+          recommendationElement.addTo(this.editor.data.graph);
 
-            // create click event handlers for each recommendation
-            this.create.RecommendationEventHandlers(
-              recommendationElement.id,
-              originalElement.id,
-            );
-          }, 100);
+          // create click event handlers for each recommendation
+          this.create.RecommendationEventHandlers(
+            recommendationElement.id,
+            originalElement.id,
+          );
         }
       },
       RecommendationEventHandlers: (
@@ -504,6 +502,14 @@ class Element {
               });
             }
           }
+        } else {
+          // RETRY...
+          setTimeout(() => {
+            this.create.RecommendationEventHandlers(
+              recommendationElementId,
+              originalElementId,
+            );
+          }, 1000);
         }
       },
       Lane: async () => {
