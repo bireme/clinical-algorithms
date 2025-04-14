@@ -16,10 +16,11 @@
       class="print-mode bg-grey-4 overflow-hidden absolute-top-left full-width full-height"
     >
       <div
-        id="editor-content" class="bg-white overflow-auto full-height"
+        id="editor-content"
+        class="bg-white overflow-auto full-height"
       >
         <!-- STAGE -->
-        <editor-stage />
+        <editor-stage/>
       </div>
     </div>
   </div>
@@ -41,7 +42,10 @@ const editor = inject('editor') as Editor;
 const loading = ref(true);
 
 onMounted(async () => {
-  const { id, logo } = route.query;
+  const {
+    id,
+    logo,
+  } = route.query;
 
   const putLogoOnHeader = logo === 'true';
 
@@ -55,6 +59,8 @@ onMounted(async () => {
     await editor.graph.open(id);
 
     await editor.graph.setToPrint(putLogoOnHeader);
+
+    editor.data.paper?.scale(0.8);
 
     setTimeout(async () => {
       loading.value = false;

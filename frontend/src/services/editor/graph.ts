@@ -382,13 +382,12 @@ class Graph {
         const options = {
           margin: 0,
           filename: `${this.editor.graph.data.algorithm.title} - ${new Date().toString()}.pdf`,
-          image: { type: 'jpeg', quality: 0.7 },
           jsPDF: {
             orientation: this.data.printSize.width > this.data.printSize.height ? 'landscape' : 'portrait',
             unit: 'px',
             format: [
-              Number(this.data.printSize.width.toFixed(0)),
-              Number(this.data.printSize.height.toFixed(0)),
+              Number((this.data.printSize.width).toFixed(0)),
+              Number((this.data.printSize.height).toFixed(0)),
             ],
           },
         };
