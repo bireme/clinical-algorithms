@@ -1,6 +1,7 @@
 import { reactive } from 'vue';
 import { api } from 'boot/axios';
-import html2pdf from 'html2pdf.js';
+import html2canvas from 'html2canvas';
+import { jsPDF as JsPdf } from 'jspdf';
 
 import Editor from 'src/services/editor/index';
 
@@ -89,13 +90,15 @@ class Graph {
 
   private async setGraph(graphId: number | string) {
     try {
-      const { data }: { data: {
+      const { data }: {
+        data: {
           id: number,
           algorithm_id: number,
           graph: string,
           user_id: number,
           updated_at: string,
-      } } = await api.get(`${RESOURCE}/${graphId}`);
+        }
+      } = await api.get(`${RESOURCE}/${graphId}`);
 
       this.data.graph.id = data.id;
       this.data.graph.algorithm_id = data.algorithm_id;
@@ -153,13 +156,18 @@ class Graph {
       // that focus on input fields
       // which changes the scroll
       setTimeout(() => {
-        Editor.setScroll({ x: 0, y: 0 });
+        Editor.setScroll({
+          x: 0,
+          y: 0,
+        });
 
         if (document.activeElement && document.activeElement instanceof HTMLElement) {
           document.activeElement.blur();
         }
 
-        document.getElementById('stage-loading-spinner-cover')?.classList.add('hidden');
+        document.getElementById('stage-loading-spinner-cover')
+          ?.classList
+          .add('hidden');
       }, 1500);
 
       return Promise.resolve(true);
@@ -272,7 +280,11 @@ class Graph {
 
             textarea.remove();
 
-            this.editor.element.create.PrintLabel({ x, y, text: label });
+            this.editor.element.create.PrintLabel({
+              x,
+              y,
+              text: label,
+            });
           }
         } else if (elementType === CustomElement.RECOMMENDATION_TOGGLER) {
           element.remove();
@@ -289,7 +301,11 @@ class Graph {
 
             input.remove();
 
-            this.editor.element.create.RectangleLabel({ x, y: y - 32, text: value });
+            this.editor.element.create.RectangleLabel({
+              x,
+              y: y - 32,
+              text: value,
+            });
 
             element.attr('body/textAnchor', 'left');
             element.attr('textAnchor', 'left');
@@ -374,25 +390,51 @@ class Graph {
     this.data.printSize.height = this.getOutermostCoordinate('y') + shiftY;
   }
 
-  public exportPDF() {
+  public async exportPDF() {
     try {
-      const stageStage = document.getElementById('editor-stage');
+      const element = document.querySelector('#editor-stage');
 
-      if (stageStage) {
-        const options = {
-          margin: 0,
-          filename: `${this.editor.graph.data.algorithm.title} - ${new Date().toString()}.pdf`,
-          jsPDF: {
-            orientation: this.data.printSize.width > this.data.printSize.height ? 'landscape' : 'portrait',
-            unit: 'px',
-            format: [
-              Number((this.data.printSize.width).toFixed(0)),
-              Number((this.data.printSize.height).toFixed(0)),
-            ],
-          },
-        };
+      if (element) {
+        const canvas = await html2canvas(<HTMLElement>element, {
+          scale: window.devicePixelRatio,
+          logging: false,
+          backgroundColor: '#FFFFFF',
+          // windowWidth: 800,
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          letterRendering: true,
+          allowTaint: true,
+          useCORS: true,
+          /* onclone: (document) => {
+            const currentElement = document.querySelector('#disc-report-content');
 
-        html2pdf(stageStage, options);
+            if (currentElement) {
+              currentElement.classList.add('pdf-mode');
+            }
+          }, */
+        });
+
+        const pdf = new JsPdf({
+          orientation: this.data.printSize.width > this.data.printSize.height ? 'landscape' : 'portrait',
+          unit: 'px',
+          format: [
+            Number((this.data.printSize.width * 0.8).toFixed(0)),
+            Number((this.data.printSize.height * 0.8).toFixed(0)),
+          ],
+        });
+
+        pdf.addImage(
+          canvas,
+          'PNG',
+          10,
+          10,
+          Number((this.data.printSize.width * 0.8).toFixed(0)),
+          Number((this.data.printSize.height * 0.8).toFixed(0)),
+          '',
+          'FAST',
+        );
+
+        pdf.save(`${this.editor.graph.data.algorithm.title} - ${new Date().toString()}.pdf`);
       }
     } catch (error) {
       console.error(error);
