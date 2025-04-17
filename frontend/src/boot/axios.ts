@@ -1,13 +1,14 @@
 import { boot } from 'quasar/wrappers';
-import axios, { AxiosInstance } from 'axios';
+// import axios, { AxiosInstance } from 'axios';
+import axios from 'axios';
 import { LocalStorage } from 'quasar';
 
-declare module '@vue/runtime-core' {
+/* declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     $axios: AxiosInstance;
     $api: AxiosInstance;
   }
-}
+} */
 
 function getAuthorizationHeader() {
   const token = LocalStorage.getItem('token') as string;

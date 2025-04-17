@@ -13,6 +13,7 @@ const RESOURCE = 'algorithms/graph';
 
 export interface IEditorData {
   mode: string,
+  scale: number,
   graph: {
     id: number,
     algorithm_id: number,
@@ -43,6 +44,7 @@ class Graph {
 
   data: IEditorData = reactive({
     mode: '',
+    scale: 1,
     graph: {
       id: 0,
       algorithm_id: 0,
@@ -252,9 +254,11 @@ class Graph {
   }
 
   /**
-   * Swap some elements in order to be exported as PDF correctly
+   * Swap some elements to be exported as PDF correctly
    */
-  public async setToPrint(putLogoOnHeader: boolean) {
+  public async setToPrint(putLogoOnHeader: boolean, scale = 1) {
+    this.data.scale = scale;
+
     await this.editor.init('editor-stage');
 
     void this.putLogoOnPdfHeader(putLogoOnHeader);
@@ -328,6 +332,24 @@ class Graph {
       this.editor.element.redrawAllConnections();
 
       this.editor.element.addElementsIndexesToPaper();
+    }
+
+    this.setScale();
+  }
+
+  public setScale() {
+    this.editor.data.paper?.scale(this.data.scale);
+
+    const finalSize = {
+      width: (this.data.printSize.width * this.data.scale).toFixed(0),
+      height: (this.data.printSize.height * this.data.scale).toFixed(0),
+    };
+
+    if (this.editor.paperDiv) {
+      this.editor.paperDiv.setAttribute(
+        'style',
+        `width: ${finalSize.width}px; height: ${finalSize.height}px`,
+      );
     }
   }
 

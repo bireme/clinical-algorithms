@@ -1,15 +1,25 @@
 <template>
   <div
-    class="text-caption text-center text-info"
+    class="text-caption text-center"
   >
+    <div v-if="props.loaded">
+      <q-icon
+        name="check"
+        size="lg"
+        color="positive"
+      />
+    </div>
+
     <q-spinner
+      v-else
       :color="props.color"
       :size="props.size"
     />
+
     <div
       v-if="props.label"
-      :style="{ color: `var(--q-color-${props.color})` }"
       class="q-mt-md"
+      :class="props.loaded ? 'text-positive' : props.color ? `text-${props.color}` : ''"
     >
       {{ props.label }}
     </div>
@@ -29,6 +39,10 @@ const props = defineProps({
   size: {
     type: String,
     default: '3em',
+  },
+  loaded: {
+    type: Boolean,
+    default: false,
   },
 });
 </script>

@@ -250,6 +250,18 @@ class Editor {
           }
         });
 
+        // responsive resizing
+        /* window.addEventListener('resize', () => {
+          const editorStageWrapper = document.getElementById('editor-stage-wrapper');
+
+          if (this.data.paper && editorStageWrapper) {
+            this.data.paper.setDimensions(
+              editorStageWrapper.clientWidth,
+              editorStageWrapper.clientHeight,
+            );
+          }
+        }); */
+
         resolve(true);
       } catch (error) {
         reject(error);

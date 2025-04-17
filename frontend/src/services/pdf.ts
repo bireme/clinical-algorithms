@@ -6,7 +6,6 @@ export async function html2pdf(options: {
   title: string,
   width: number,
   height: number,
-  proportion: number,
 }) {
   try {
     const {
@@ -14,17 +13,21 @@ export async function html2pdf(options: {
       elementId,
       width,
       height,
-      proportion,
     } = options;
 
     const element = document.querySelector(`#${elementId}`);
 
     if (element) {
+      console.log('Final PDF Size:');
+      console.log({ width, height });
+
       const canvas = await html2canvas(<HTMLElement>element, {
-        scale: window.devicePixelRatio,
+        // scale: window.devicePixelRatio,
+        scale: 2,
         logging: false,
         backgroundColor: '#FFFFFF',
-        // windowWidth: 800,
+        windowWidth: width,
+        windowHeight: height,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         letterRendering: true,
@@ -42,19 +45,16 @@ export async function html2pdf(options: {
       const pdf = new JsPdf({
         orientation: width > height ? 'landscape' : 'portrait',
         unit: 'px',
-        format: [
-          Number((width * proportion).toFixed(0)),
-          Number((height * proportion).toFixed(0)),
-        ],
+        format: [width, height],
       });
 
       pdf.addImage(
         canvas,
         'PNG',
-        10,
-        10,
-        Number((width * proportion).toFixed(0)),
-        Number((height * proportion).toFixed(0)),
+        0,
+        0,
+        width,
+        height,
         '',
         'FAST',
       );

@@ -28,6 +28,7 @@ const fullHeight = computed(() => route.name === ALGORITHMS_PUBLIC_PRINT);
   position: absolute
   width: 100%
   height: calc(100% - 68px)
+  touch-action: pan-x pan-y
 
 #editor-stage-wrapper.editor-stage-wrapper-full-height
     height: 100% !important
