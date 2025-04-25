@@ -12,6 +12,13 @@ def index():
         db_error(e)
 
 
+def index_public():
+    try:
+        return select("SELECT id, name FROM users")
+    except Error as e:
+        db_error(e)
+
+
 def store(user_data: UserSchema):
     try:
         user_id = insert(
@@ -63,7 +70,7 @@ def update_user(user: UserSchema):
 
 def search_user(keyword: str):
     try:
-        like = "%"+keyword+"%"
+        like = "%" + keyword + "%"
 
         return select("SELECT * FROM users WHERE name LIKE %s OR email LIKE %s", [like, like])
     except Error as e:

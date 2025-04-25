@@ -10,10 +10,22 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
+router_public = APIRouter(
+    prefix="/users",
+    tags=["users"],
+    dependencies=[],
+    responses={404: {"description": "Not found"}},
+)
+
 
 @router.get("")
 def index_user():
     return users.index()
+
+
+@router_public.get("/public")
+def index_user_public():
+    return users.index_public()
 
 
 @router.post("")

@@ -93,6 +93,18 @@ class Users {
     this.toggleEditDialog();
   }
 
+  public async get_public() {
+    try {
+      const { data } = await api.get('users/public');
+
+      this.data.users = [...data];
+
+      return Promise.resolve(true);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
   public async get() {
     try {
       const token = LocalStorage.getItem('token');

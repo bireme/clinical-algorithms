@@ -99,6 +99,7 @@ import AlgorithmsTable from 'components/tables/algorithms-table.vue';
 import Users from 'src/services/users';
 
 import { ALGORITHMS_PUBLIC_SEARCH } from 'src/router/routes/algorithms';
+import { LocalStorage } from 'quasar';
 
 const route = useRoute();
 const router = useRouter();
@@ -161,7 +162,13 @@ const clearSearch = () => {
 };
 
 onBeforeMount(async () => {
-  await users.get();
+  const token = LocalStorage.getItem('token');
+
+  if (token) {
+    await users.get();
+  } else {
+    await users.get_public();
+  }
 
   if (route.query.keyword) {
     data.initialKeyword = String(route.query.keyword);
