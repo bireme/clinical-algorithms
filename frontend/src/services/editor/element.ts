@@ -465,11 +465,14 @@ class Element {
             },
           }).resize(600, 500 * metadata.fixed.length);
 
-          this.create.RecommendationTogglerButton(originalElement, recommendationElement);
-
           recommendationElement.attr('./display', 'none');
 
-          recommendationElement.addTo(this.editor.data.graph);
+          this.create.RecommendationTogglerButton(originalElement, recommendationElement);
+
+          // the recommendation element must be added after the toggler button
+          setTimeout(() => {
+            recommendationElement.addTo(this.editor.data.graph);
+          }, 500);
 
           // create click event handlers for each recommendation
           this.create.RecommendationEventHandlers(
@@ -482,8 +485,8 @@ class Element {
         recommendationElementId: dia.Cell.ID,
         originalElementId: dia.Cell.ID,
       ) => {
-        // create the ID relations between original element (that contains recommendations)
-        // and the element with recommendations list
+        // create the ID relations between the original element (that contains recommendations)
+        // and the element with the recommendation list
         // (used for toggle button)
         this.data.recommendationsRelationsMap[originalElementId] = recommendationElementId;
 

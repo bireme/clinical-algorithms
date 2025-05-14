@@ -132,7 +132,7 @@ class Graph {
 
           await this.editor.element.createAllRecommendationsTotals();
 
-          // READ ONLY MODE
+          // READ-ONLY MODE
           if (
             this.editor.data.readOnly
             && this.data.mode !== GRAPH_MODE_PRINT
