@@ -40,6 +40,7 @@ import Metadata from 'src/services/editor/metadata';
 import { orderRecommendations } from 'src/services/recommendations';
 import { IFixedMetadata } from 'src/services/editor/constants/metadata';
 import { COLOR_ACCENT } from 'src/services/colors';
+import { translateInterventionType } from 'src/services/editor/constants/metadata/intervention';
 
 class Element {
   editor: Editor;
@@ -1261,7 +1262,7 @@ autores individuales, y la producción de algoritmos con esta herramienta no imp
                   RecommendationElement.attr('grade_logo/style', 'display: none');
                 }
 
-                RecommendationElement.attr('intervention_type_text/text', recommendation.intervention_type);
+                RecommendationElement.attr('intervention_type_text/text', translateInterventionType(recommendation.intervention_type));
                 RecommendationElement.attr('original_transcription_text/text', recommendation.description);
                 RecommendationElement.attr('original_transcription_text', { textWrap: { width: elementWidth * 0.8 } });
 

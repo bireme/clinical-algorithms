@@ -6,6 +6,7 @@ import {
 } from 'src/services/editor/constants/metadata/recommendation_type';
 import icons from 'src/services/editor/elements/svg_icons';
 import { COLOR_ACCENT, COLOR_PRIMARY } from 'src/services/colors';
+import { translateInterventionType } from 'src/services/editor/constants/metadata/intervention';
 
 export enum CustomElement {
   START = 'StartElement',
@@ -199,7 +200,7 @@ const customElements = {
         ) {
           items += '<div class="row full-width bg-grey-2"><div class="col-12 text-center recommendation-title">';
           items += getRecommendationTypeLabel(recommendation.recommendation_type);
-          items += ` - Tipo de intervención: ${recommendation.intervention_type}`;
+          items += ` - Tipo de intervención: ${translateInterventionType(recommendation.intervention_type)}`;
           items += '</div></div>';
         }
 

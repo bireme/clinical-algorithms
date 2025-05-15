@@ -46,7 +46,7 @@ const defaults = {
     },
     intervention_type_image: {
       xlinkHref: '',
-      refX: 170,
+      refX: 200,
       refY: 68,
       height: 40,
     },
